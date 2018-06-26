@@ -1,0 +1,41 @@
+{
+  "name": "webhandle-page-editor",
+  "version": "1.0.0",
+  "description": "Edit web pages",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "less-build": "lessc less/page-editor.less > public/webhandle-page-editor/css/page-editor.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EmergentIdeas/webhandle-page-editor.git"
+  },
+  "keywords": [
+    "html",
+    "ckeditor",
+    "page",
+    "editor"
+  ],
+  "author": "Dan Kolz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EmergentIdeas/webhandle-page-editor/issues"
+  },
+  "homepage": "https://github.com/EmergentIdeas/webhandle-page-editor#readme",
+  "devDependencies": {
+    "browserify": "^16.2.2",
+    "less": "^2.7.2",
+    "onchange": "^3.2.1",
+    "parallelshell": "^3.0.1",
+    "uglify-js": "^3.4.0"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "ckeditor": "^4.9.2",
+    "ei-pic-browser": "^1.0.4",
+    "file-sink": "^1.0.2",
+    "filter-log": "0.0.5",
+    "underscore": "^1.9.1"
+  }
+}

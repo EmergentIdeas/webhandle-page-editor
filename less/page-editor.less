@@ -1,0 +1,42 @@
+.webhandle-page-editor-tools {
+	position: fixed;
+	
+	bottom: 10px;
+	left: 10px;
+	
+	a {
+		color: white;
+		background-color: #3c7cff;
+		display: block;
+		width: 60px;
+		height: 60px;
+		line-height: 60px;
+		font-size: 26pt;
+		font-weight: 600;
+		border-radius: 50%;
+		opacity: .6;
+		text-decoration: none;
+		text-align: center;
+		margin-top: 15px;
+		
+		display: none;
+		
+		&.start-editing {
+			display: block;
+		}
+		
+		.editing-page & {
+			display: block;
+			
+			&.start-editing {
+				display: none;
+			}
+		}
+	}
+	
+}
+
+
+.page-editor-editable {
+	outline: dashed 1px #3c7cff;
+}
