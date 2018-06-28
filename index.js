@@ -2,14 +2,15 @@
 var CKEditorDrop = require('ei-pic-browser/ckeditor-drop')
 var PicUpload = require('ei-pic-browser/pic-upload')
 
-var pageEditorSetup = function($ /*jQuery*/, options) {
+var pageEditorSetup = function(options) {
 	
+	var $ = jQuery
 	options = options || {}
 	
 	var cssLocation = '/webhandle-page-editor/css/page-editor.css'
 	var editableSelector = '.edit-content-inline'
 	
-	$('head').append('<link rel="stylesheet" href="/webhandle-page-editor/css/page-editor.css" type="text/css" />');
+	$('head').append('<link rel="stylesheet" href="' + cssLocation + '" type="text/css" />');
 	
 	$('body').append('<div class="webhandle-page-editor-tools">' +
 	'<a href="#" title="Properties" class="property-button">P</a>' +

@@ -1,0 +1,12 @@
+<html>
+	<head>
+		<title>Find File</title>
+		<link href="/webhandle-page-editor/css/page-editor.css" rel="stylesheet">
+	</head>
+	<body class="webhandle-page-editor">
+		<ul class="browser-list">
+			__parent::./parent-dir-item__
+			__items::./item__
+		</ul>
+	</body>
+</html>

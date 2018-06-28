@@ -1,0 +1,6 @@
+<li >
+	<a href="javascript: window.opener.CKEDITOR.tools.callFunction(__$globals.CKEditorFuncNum__, '/__relPath__'); window.opener.focus(); window.close();">
+		<img src="__thumbnail__" />
+		__name__
+	</a>
+</li>
