@@ -1,6 +1,12 @@
 
+
 var CKEditorDrop = require('ei-pic-browser/ckeditor-drop')
 var PicUpload = require('ei-pic-browser/pic-upload')
+var Dialog = require('ei-dialog')
+var inputTemplate = require('./input-template.tri')
+var textareaTemplate = require('./textarea-template.tri')
+
+var propertiesDialog
 
 var pageEditorSetup = function(options) {
 	
@@ -9,6 +15,7 @@ var pageEditorSetup = function(options) {
 	
 	var cssLocation = '/webhandle-page-editor/css/page-editor.css'
 	var editableSelector = '.edit-content-inline'
+	
 	
 	$('head').append('<link rel="stylesheet" href="' + cssLocation + '" type="text/css" />');
 	
@@ -82,11 +89,43 @@ var pageEditorSetup = function(options) {
 		evt.preventDefault()
 		$.post('/webhandle-page-editor' + window.location.pathname, {
 			sectionsContent: monitor.getSections(),
-			pageInfo: monitor.pageInfo
+			pageInfo: JSON.stringify(monitor.pageInfo)
 		})
 		.done(function(data) {
 			alert('saved')
 		})
+	})
+	
+	$('.webhandle-page-editor-tools .property-button').click(function(evt) {
+		evt.preventDefault()
+		propertiesDialog = new Dialog({
+			title: 'Properties',
+			body: function(bodyElement) {
+				var result = '<div class="page-editor-page-properties">'
+				result += inputTemplate({
+					label: 'Page title',
+					name: 'pageTitle',
+					id: 'pageTitle',
+					value: monitor.pageInfo.pageMeta.title
+				})
+				result += textareaTemplate({
+					label: 'Page description',
+					name: 'pageDescription',
+					id: 'pageDescription',
+					value: monitor.pageInfo.pageMeta.description
+				})
+				result += '</div>'
+				return result
+			},
+			on: {
+				'.btn-ok': function() {
+					monitor.pageInfo.pageMeta.title = $('#pageTitle').val()
+					monitor.pageInfo.pageMeta.description = $('#pageDescription').val()
+					propertiesDialog.close()
+				}
+			}
+		})
+		propertiesDialog.open()
 	})
 	
 }

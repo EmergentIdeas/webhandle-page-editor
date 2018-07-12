@@ -43,3 +43,16 @@
   padding-right: 30px;
   max-width: 100px;
 }
+.page-editor-page-properties label {
+  display: block;
+  margin-bottom: 15px;
+}
+.page-editor-page-properties input,
+.page-editor-page-properties textarea {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 500px;
+  border: solid 1px #888888;
+  box-shadow: none;
+}

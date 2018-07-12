@@ -1,0 +1,4 @@
+<label>
+	__label__
+	<input type="text" name="__name__" id="__id__" value="__value__"/>
+</label>

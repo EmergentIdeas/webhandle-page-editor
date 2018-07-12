@@ -1,0 +1,4 @@
+<label>
+	__label__
+	<textarea name="__name__" id="__id__" rows="5" >__value__</textarea>
+</label>
