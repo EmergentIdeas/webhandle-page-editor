@@ -49,9 +49,24 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	let uploadServer = createUploadFileServer(sink)
 	router.use('/files/upload-file', uploadServer)
 	
+	let publicFolderSink = new FileSink(webhandle.staticPaths[0])
+	let oldStyleUploadServer = createUploadFileServer(publicFolderSink)
+	router.use(/\/files\/upload(.*)/, oldStyleUploadServer)
+	
 	router.use('/files/browse/type/image', createBrowseHandler(imagesFilter, 'image'))
 	router.use('/files/browse/type/all', createBrowseHandler(allFilter, 'all'))
 	
+	router.use(/\/files\/thumbnails\/urls(.*)/, (req, res, next) => {
+		let sink = new FileSink(path.join(webhandle.staticPaths[0]))
+		let prefix = req.params[0]
+		sink.getFullFileInfo(prefix || '').then((item) => {
+			let result = []
+			for(let child of item.children) {
+				result.push(path.join(prefix, child.name))
+			}
+			res.json(result)
+		})
+	})
 	
 	
 	let pageInfoServer = createPageInfoServer(pagesSource)
