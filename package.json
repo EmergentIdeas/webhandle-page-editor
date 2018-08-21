@@ -1,6 +1,6 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Edit web pages",
   "main": "index.js",
   "scripts": {
