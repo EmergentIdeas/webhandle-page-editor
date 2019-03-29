@@ -39,7 +39,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.filebrowserBrowseUrl = '/webhandle-page-editor/files/browse/type/all'
 	config.filebrowserImageBrowseUrl = '/webhandle-page-editor/files/browse/type/image'
 	config.filebrowserUploadUrl = '/webhandle-page-editor/files/upload-file?action=upload'
-	config.allowedContent = "p h1 h2 h3 h4 h5 h6 span strong em div table tr td th tbody dl dt dd br hr ul ol li pre u[class](*); img[*](*); a[*](*); iframe[*](*)"
+	config.allowedContent = "p h1 h2 h3 h4 h5 h6 span sup sub strong em div table tr td th tbody dl dt dd br hr ul ol li pre u[class](*); img[*](*); a[*](*); iframe[*](*)"
 	config.disallowedContent = 'img{width, height}[width, height]'
 
 	config.extraPlugins = (config.extraPlugins ? config.extraPlugins + ',' : '') + 'sourcedialog'
