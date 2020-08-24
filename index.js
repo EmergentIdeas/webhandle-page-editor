@@ -62,7 +62,10 @@ var pageEditorSetup = function(options) {
 				}
 				CKEDITOR.inline(id, editorOptions) 
 				
-				var ckDrop = new CKEditorDrop(id)
+				var ckDrop = new CKEditorDrop('#' + id)
+				if(options.fileFunctionsPrefix) {
+					ckDrop.fileUploadUrlPrefix = options.fileFunctionsPrefix + ckDrop.fileUploadUrlPrefix
+				}
 				// ckDrop.imageLayouts = pageEditorConfiguration.imageLayouts || []
 				ckDrop.imageLayouts = []
 				ckDrop.render()
