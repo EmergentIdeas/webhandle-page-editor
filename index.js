@@ -34,6 +34,13 @@ var pageEditorSetup = function(options) {
 		monitor.sectionsContent[index] = editor.getData()
 		enablePageSave();
 	}
+
+	var updateSectionsContent = function () {
+		var size = Object.keys(CKEDITOR.instances).length
+		for(var i = 0; i < size; i++) {
+			monitor.sectionsContent[i] = CKEDITOR.instances['e' + i].getData()
+		}
+	}
 	
 	var monitor = {
 		sectionsContent: [],
@@ -90,6 +97,7 @@ var pageEditorSetup = function(options) {
 	
 	$('.webhandle-page-editor-tools .save-button').click(function(evt) {
 		evt.preventDefault()
+		updateSectionsContent()
 		$.post('/webhandle-page-editor' + window.location.pathname, {
 			sectionsContent: monitor.getSections(),
 			pageInfo: JSON.stringify(monitor.pageInfo)
