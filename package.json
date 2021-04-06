@@ -1,6 +1,6 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Edit web pages",
   "main": "index.js",
   "scripts": {
@@ -35,11 +35,14 @@
     "ckeditor": "^4.9.2",
     "composite-file-list": "^1.0.2",
     "ei-dialog": "^1.0.3",
-    "ei-pic-browser": "^1.0.4",
-    "file-sink": "^1.0.4",
+    "ei-pic-browser": "^1.0.9",
+    "file-sink": "^1.0.5",
     "filter-log": "0.0.5",
+    "find": "^0.3.0",
+    "kalpa-tree": "^3.3.1",
     "tripartite": "^1.0.13",
-    "underscore": "^1.9.1"
+    "underscore": "^1.9.1",
+    "webhandle-page-server": "^1.0.11"
   },
   "browserify": {
     "transform": [

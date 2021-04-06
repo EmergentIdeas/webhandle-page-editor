@@ -5,6 +5,8 @@ const filog = require('filter-log')
 const _ = require('underscore')
 const FileSink = require('file-sink')
 const cheerio = require('cheerio')
+const find = require('find')
+
 
 let log = filog('webhandle-page-editor')
 
@@ -68,12 +70,83 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		})
 	})
 	
+	let pagesDirectory = path.join(webhandle.projectRoot, 'pages')
+	webhandle.routers.primary.get('/admin/files/api/all-pages', (req, res, next) => {
+		if(pageEditorService.isUserPageEditor(req)) {
+			find.file(/\.tri$/, pagesDirectory, (files) => {
+				files = files.map(file => {
+					let parts = file.split('.')
+					parts.pop()
+					return parts.join('.')
+				})
+				.map(file => {
+					return file.substring(pagesDirectory.length)
+				})
+				res.json(files)
+			})
+		}
+		else {
+			res.redirect('/login')
+		}
+	})
+	
+	let menuSink = new FileSink(path.join(webhandle.projectRoot, 'menus'))
+	
+	webhandle.routers.primary.get('/admin/files/api/all-pages/:menuName', async (req, res, next) => {
+		if(pageEditorService.isUserPageEditor(req)) {
+			let content = await menuSink.read(req.params.menuName + '.json')
+			res.end(content)
+
+		}
+		else {
+			res.redirect('/login')
+		}
+	})
+	
 	
 	let pageInfoServer = createPageInfoServer(pagesSource)
 	router.use(pageInfoServer)
 	let pageSaveServer = createPageSaveServer(pagesSource)
 	router.use(pageSaveServer)
 	
+	webhandle.routers.primary.get('/admin/page-editor/menu-editor', (req, res, next) => {
+		webhandle.pageServer.prerenderSetup(req, res, {}, () => {
+			res.render('webhandle-page-editor/tools/menu-editor')
+		})
+	})
+	webhandle.routers.primary.get('/admin/page-editor/create-page', (req, res, next) => {
+		webhandle.pageServer.prerenderSetup(req, res, {}, () => {
+			webhandle.sinks.project.getFullFileInfo('page-templates', function(err, data) {
+				if(!err && data) {
+					res.locals.templates = data.children.map(file => file.name).map(name => {
+						let parts = name.split('.')
+						parts.pop()
+						return parts.join('.')
+					})
+					res.locals.templates = Array.from(new Set(res.locals.templates))
+				}
+				let absPrefix = path.join(webhandle.projectRoot, 'pages')
+				find.dir(absPrefix, (dirs) => {
+					dirs = dirs.map(dir => dir.substring(absPrefix.length))
+					res.locals.destinations = dirs
+					res.render('webhandle-page-editor/tools/create-new-page')
+
+				})
+			})
+		})
+	})
+	webhandle.routers.primary.post('/admin/page-editor/create-page', async (req, res, next) => {
+		
+		let body = await webhandle.sinks.project.read(path.join('page-templates', req.body.templateName) + '.tri')
+		let meta = await webhandle.sinks.project.read(path.join('page-templates', req.body.templateName) + '.json')
+		
+		webhandle.sinks.project.write(path.join('pages', req.body.destination, req.body.pageName) + '.tri', body)
+		webhandle.sinks.project.write(path.join('pages', req.body.destination, req.body.pageName) + '.json', meta)
+		
+		res.addFlashMessage('Page created', (err) => {
+			res.redirect(path.join(req.body.destination, req.body.pageName))
+		})
+	})
 	
 	
 }

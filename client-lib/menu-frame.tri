@@ -1,0 +1,12 @@
+<div class="menu-editor">
+	<div class="tree-side">
+		<div class="controls">
+			<button class="add">+ Add</button> <button class="remove">- Remove</button> <button class="save">Save</button>
+		</div>
+		<div class="tree-spot">
+			
+		</div>
+	</div>
+	<div class="properties-side">
+	</div>
+</div>

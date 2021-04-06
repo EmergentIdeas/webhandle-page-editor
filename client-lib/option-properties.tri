@@ -1,0 +1,29 @@
+<div class="option-properties">
+	<label>Label:
+		<input class="control" name="label" type="text"/>
+	</label>
+	<label>Link by:
+	</label>
+	<label>
+		<input type="radio" name="linkBy" value="page" /> page
+	</label>
+	<label>
+		<input type="radio" name="linkBy" value="url" /> url
+	</label>
+	<label class="page-label">Page
+		<select name="page">
+			<option value="">-- choose a page --</option>
+			
+		</select>
+	</label>
+	<label class="url-label">URL:
+		<input class="control" name="url" type="text" />
+	</label>
+	<label>Custom classes:
+		<input class="control" name="customClasses" type="text"/>
+	</label>
+	<label>Image:
+		<input class="form-control" type="text" placeholder="" name="image" data-image-dir="/img"/>
+	</label>
+
+</div>

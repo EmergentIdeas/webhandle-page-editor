@@ -1,0 +1,22 @@
+__::app_pre__
+<h1>Create New Page</h1>
+<form action="/admin/page-editor/create-page" method="post">
+	<label>New page name (must be lower case, dashes, and numbers)
+		<input name="pageName" type="text" />
+	</label>	
+	<label>Page template
+		<select name="templateName">
+			__templates::./template-option__
+		</select>
+	</label>
+	<label>Destination
+		<select name="destination">
+			<option value="/">/</option>
+			__destinations::./template-option__
+		</select>
+	</label>
+	<br/><br/>
+	<button class="btn" type="submit">Submit</button>
+</form>
+
+__::app_post__

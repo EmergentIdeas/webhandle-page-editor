@@ -1,0 +1,127 @@
+module.exports = [{
+    "label": "hours-and-admission.html",
+    "url": "\/your-visit\/hours-and-admission.html"
+}, {
+    "label": "grounds-and-buildings.html",
+    "url": "\/your-visit\/grounds-and-buildings.html"
+}, {
+    "label": "history-center.html",
+    "url": "\/your-visit\/history-center.html"
+}, {
+    "label": "artifacts.html",
+    "url": "\/your-visit\/artifacts.html"
+}, {
+    "label": "mayowood.html",
+    "url": "\/your-visit\/mayowood.html"
+}, {
+    "label": "history center trails.html",
+    "url": "\/your-visit\/history center trails.html"
+}, {
+    "label": "weddings-and-events.html",
+    "url": "\/your-visit\/weddings-and-events.html"
+}, {
+    "label": "community-garden.html",
+    "url": "\/your-visit\/community-garden.html"
+}, {
+    "label": "monetary-donation.html",
+    "url": "\/donate\/monetary-donation.html"
+}, {
+    "label": "volunteer-your-time.html",
+    "url": "\/donate\/volunteer-your-time.html"
+}, {
+    "label": "your-contribution-matters.html",
+    "url": "\/donate\/your-contribution-matters.html"
+}, {
+    "label": "donate-items.html",
+    "url": "\/donate\/donate-items.html"
+}, {
+    "label": "volunteer.html",
+    "url": "\/about-us\/volunteer.html"
+}, {
+    "label": "brief-history.html",
+    "url": "\/about-us\/brief-history.html"
+}, {
+    "label": "contact-us.html",
+    "url": "\/about-us\/contact-us.html"
+}, {
+    "label": "genealogical-society.html",
+    "url": "\/about-us\/genealogical-society.html"
+}, {
+    "label": "mission-vision.html",
+    "url": "\/about-us\/mission-vision.html"
+}, {
+    "label": "board-and-staff.html",
+    "url": "\/about-us\/board-and-staff.html"
+}, {
+    "label": "history-and-overview.html",
+    "url": "\/about-us\/history-and-overview.html"
+}, {
+    "label": "employment.html",
+    "url": "\/about-us\/employment.html"
+}, {
+    "label": "faq.html",
+    "url": "\/about-us\/faq.html"
+}, {
+    "label": "become-a-member.html",
+    "url": "\/about-us\/become-a-member.html"
+}, {
+    "label": "inner-page.html",
+    "url": "\/page-templates\/inner-page.html"
+}, {
+    "label": "outside-resources.html",
+    "url": "\/resources\/outside-resources.html"
+}, {
+    "label": "area-historical-attractions.html",
+    "url": "\/resources\/area-historical-attractions.html"
+}, {
+    "label": "photograph-policy.html",
+    "url": "\/resources\/photograph-policy.html"
+}, {
+    "label": "searchable-online-databases.html",
+    "url": "\/resources\/searchable-online-databases.html"
+}, {
+    "label": "research-center.html",
+    "url": "\/resources\/research-center.html"
+}, {
+    "label": "exhibits.html",
+    "url": "\/going-on\/exhibits.html"
+}, {
+    "label": "the-scoop.html",
+    "url": "\/going-on\/the-scoop.html"
+}, {
+    "label": "movies-under-the-stars.html",
+    "url": "\/going-on\/movies-under-the-stars.html"
+}, {
+    "label": "education.html",
+    "url": "\/going-on\/education.html"
+}, {
+    "label": "adult-scavenger-hunts.html",
+    "url": "\/going-on\/adult-scavenger-hunts.html"
+}, {
+    "label": "school-field-trips.html",
+    "url": "\/going-on\/school-field-trips.html"
+}, {
+    "label": "princess-cafe-lecture-series.html",
+    "url": "\/going-on\/princess-cafe-lecture-series.html"
+}, {
+    "label": "living-history.html",
+    "url": "\/going-on\/living-history.html"
+}, {
+    "label": "hay-rides-and-story-time.html",
+    "url": "\/going-on\/hay-rides-and-story-time.html"
+}, {
+    "label": "calendar.html",
+    "url": "\/going-on\/calendar.html"
+}, {
+    "label": "roosters-base-ball.html",
+    "url": "\/going-on\/roosters-base-ball.html"
+}, {
+    "label": "summer-day-camp.html",
+    "url": "\/going-on\/summer-day-camp.html"
+}, {
+    "label": "alan-calveno-lecture-series.html",
+    "url": "\/going-on\/alan-calveno-lecture-series.html"
+}, {
+    "label": "havest-moon-festival.html",
+    "url": "\/going-on\/havest-moon-festival.html"
+}]

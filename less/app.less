@@ -1,0 +1,98 @@
+@import (inline) "tree.css";
+
+
+.menu-editor {
+	/*
+	.tree-container {
+	//	background-color: white;
+	}
+
+	.tree-container .tree ul li.node .node-contents .label {
+		color: #222222;
+	}
+	.tree-container .tree ul li.node.selected .node-contents .label {
+		//color: white;
+	}
+
+	.tree-container .tree ul li.node {
+		background-color: white;
+		color: black;
+		
+	}
+	*/
+/*
+	.tree-container .tree ul li.node .label-mask {
+	background-image: -webkit-linear-gradient( left , rgba(57, 60, 64, 0) 0%, white 90%);
+	background-image: linear-gradient(to right, rgba(57, 60, 64, 0) 0%, white 90%); 
+	}
+	.tree-container .tree li.node {
+		svg {
+			display: none;
+		}
+	}
+*/
+	position: relative;
+	
+	@tree-width: 300px;
+	.tree-side {
+		position: absolute;
+		width: @tree-width;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		box-sizing: border-box;
+	}
+	
+	.tree-spot {
+		position: absolute;
+		width: 100%;
+		bottom: 0;
+		left: 0;
+		top: 80px;
+		box-sizing: border-box;
+	}
+	
+	.controls {
+		position: absolute;
+		width: 100%;
+		top: 0;
+		left: 0;
+		height: 80px;
+		box-sizing: border-box;
+	}
+	
+	.properties-side {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: @tree-width;
+	}
+	
+	.option-properties {
+		label {
+			display: block;
+			margin-bottom: .8em;
+		}
+		
+		input[type=text] {
+			display: block;
+			box-sizing: border-box;
+			width: 100%;
+			padding: 3px 6px;
+			background: transparent;
+			border-radius: 4px;
+			border: solid 1px black;
+		}
+		
+		select {
+			display: block;
+			box-sizing: border-box;
+			width: 100%;
+			padding: 3px 6px;
+			background: transparent;
+			border-radius: 4px;
+			border: solid 1px black;
+		}
+	}
+}

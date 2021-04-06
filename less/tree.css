@@ -1,0 +1,313 @@
+.tree-container {
+  position: relative;
+  background-color: #393C40;
+  width: 100%;
+  height: 100%; }
+  .tree-container.ie-trident .tree.tree-overflow {
+    overflow-y: scroll; }
+  .tree-container .traveling-node {
+    list-style: none;
+    position: absolute;
+    opacity: 1;
+    width: 100%;
+    height: 36px;
+    top: 0;
+    left: 0;
+    /*
+   * This seems weird, and it is, but in FF (See #364), when nodes are moved in the tree, when you go to update some innerHTML of the node
+   * the node text disappears. It seems to be a bug introduced in FF 25 (worked fine up until FF 24.8). Forcing a node's overflow to visible
+   * forces FF to not make the innerHTML of the `.label` vanish. Somewhat surprisingly, overflow of visible is okay since we're using label masking.
+   * See a simplified demo of the bug here: http://codepen.io/anon/pen/VmRROj
+   */
+    overflow: visible;
+    transition-property: opacity;
+    transition-duration: 300ms;
+    transition-timing-function: ease-out;
+    height: 36px;
+    background: #25282D;
+    box-shadow: 0 2px 6px 0 rgba(37, 40, 45, 0.5);
+    width: calc(100% + 17px);
+    opacity: 0.9;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    cursor: move;
+    overflow-x: hidden; }
+    .tree-container .traveling-node .node-contents {
+      padding: 10px 0px 8px;
+      font-size: 14px;
+      line-height: 1;
+      text-align: left;
+      white-space: nowrap; }
+      .tree-container .traveling-node .node-contents svg.icon {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 2px;
+        width: 12px;
+        height: 11px;
+        fill: #ADB8BC; }
+      .tree-container .traveling-node .node-contents .label {
+        display: inline-block;
+        vertical-align: middle;
+        margin-left: 10px;
+        color: #ADB8BC;
+        text-shadow: 0 1px 0 rgba(0, 0, 0, 0.23); }
+    .tree-container .traveling-node .label-mask {
+      /* This is used to mask long label names on the nodes */
+      position: absolute;
+      width: 100px;
+      height: 100%;
+      top: 0;
+      right: 0; }
+      .tree-container .traveling-node .label-mask:after {
+        content: "";
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        top: 16px;
+        right: 12px;
+        border-radius: 50%; }
+    .tree-container .traveling-node .node-contents {
+      padding: 10px 0px 8px 14px;
+      transition-property: transform, opacity;
+      transition-duration: 300ms;
+      transition-timing-function: ease-out; }
+      .tree-container .traveling-node .node-contents svg.icon {
+        margin-left: 8px;
+        margin-top: 1px;
+        fill: #EFF3F7; }
+      .tree-container .traveling-node .node-contents .label {
+        color: #EFF3F7;
+        transition-property: color;
+        transition-duration: 300ms;
+        transition-timing-function: ease-out; }
+    .tree-container .traveling-node .label-mask {
+      background-image: -webkit-linear-gradient(left, rgba(57, 60, 64, 0) 0%, #393C40 90%);
+      background-image: linear-gradient(to right, rgba(57, 60, 64, 0) 0%, #393C40 90%);
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px; }
+    .tree-container .traveling-node.selected {
+      box-shadow: inset 4px 0 0 #FFE593; }
+      .tree-container .traveling-node.selected.illegal {
+        box-shadow: inset 4px 0 0 #FBCC3C; }
+    .tree-container .traveling-node.illegal {
+      opacity: .9; }
+      .tree-container .traveling-node.illegal .node-contents {
+        opacity: .7; }
+        .tree-container .traveling-node.illegal .node-contents .icon {
+          fill: #FF4D4B; }
+        .tree-container .traveling-node.illegal .node-contents .label {
+          color: #FF4D4B; }
+      .tree-container .traveling-node.illegal:after {
+        color: #FF4D4B;
+        background: #FF4D4B;
+        box-shadow: 0 0.25em 0 0 #FF4D4B, 0 0.5em 0 0 #FF4D4B; }
+    .tree-container .traveling-node:after {
+      content: "";
+      position: absolute;
+      width: 12px;
+      top: 13px;
+      right: 10px;
+      height: .1em;
+      background: #EFF3F7;
+      box-shadow: 0 0.25em 0 0 #EFF3F7, 0 0.5em 0 0 #EFF3F7;
+      opacity: 0.9;
+      transition-property: background, box-shadow, color;
+      transition-duration: 300ms;
+      transition-timing-function: ease-out; }
+    .tree-container .traveling-node .toggler, .tree-container .traveling-node .indicator:after {
+      display: none; }
+  .tree-container .tree.editable:not(.filtered-results) + .traveling-node.selected:not(.illegal):after {
+    background: #FFE593;
+    box-shadow: 0 0.25em 0 0 #FFE593, 0 0.5em 0 0 #FFE593; }
+  .tree-container .traveling-node .label-mask {
+    background-image: -webkit-linear-gradient(left, rgba(37, 40, 45, 0) 0%, #25282D 90%);
+    background-image: linear-gradient(to right, rgba(37, 40, 45, 0) 0%, #25282D 90%); }
+  .tree-container .tree {
+    overflow: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+    height: 100%;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
+    .tree-container .tree.transitions ul li.node {
+      transition-property: transform, opacity, height;
+      transition-duration: 300ms;
+      transition-timing-function: ease-out; }
+      .tree-container .tree.transitions ul li.node.transitioning-node {
+        opacity: 0; }
+        .tree-container .tree.transitions ul li.node.transitioning-node:not(.outgoing-node) {
+          transition-property: height, transform; }
+      .tree-container .tree.transitions ul li.node .node-contents {
+        transition-property: transform, opacity;
+        transition-duration: 300ms;
+        transition-timing-function: ease-out; }
+        .tree-container .tree.transitions ul li.node .node-contents .toggler {
+          transition-property: transform;
+          transition-duration: 300ms; }
+    .tree-container .tree:hover li.node:not(.root) .toggler {
+      opacity: 1; }
+    .tree-container .tree ul {
+      list-style-type: none;
+      padding: 0px;
+      margin: 0px;
+      transform: translateX(0); }
+      .tree-container .tree ul li.node {
+        list-style: none;
+        position: absolute;
+        opacity: 1;
+        width: 100%;
+        height: 36px;
+        top: 0;
+        left: 0;
+        /*
+   * This seems weird, and it is, but in FF (See #364), when nodes are moved in the tree, when you go to update some innerHTML of the node
+   * the node text disappears. It seems to be a bug introduced in FF 25 (worked fine up until FF 24.8). Forcing a node's overflow to visible
+   * forces FF to not make the innerHTML of the `.label` vanish. Somewhat surprisingly, overflow of visible is okay since we're using label masking.
+   * See a simplified demo of the bug here: http://codepen.io/anon/pen/VmRROj
+   */
+        overflow: visible;
+        transition-property: opacity;
+        transition-duration: 300ms;
+        transition-timing-function: ease-out;
+        cursor: pointer; }
+        .tree-container .tree ul li.node .node-contents {
+          padding: 10px 0px 8px;
+          font-size: 14px;
+          line-height: 1;
+          text-align: left;
+          white-space: nowrap; }
+          .tree-container .tree ul li.node .node-contents svg.icon {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 2px;
+            width: 12px;
+            height: 11px;
+            fill: #ADB8BC; }
+          .tree-container .tree ul li.node .node-contents .label {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 10px;
+            color: #ADB8BC;
+            text-shadow: 0 1px 0 rgba(0, 0, 0, 0.23); }
+        .tree-container .tree ul li.node .label-mask {
+          /* This is used to mask long label names on the nodes */
+          position: absolute;
+          width: 100px;
+          height: 100%;
+          top: 0;
+          right: 0; }
+          .tree-container .tree ul li.node .label-mask:after {
+            content: "";
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            top: 16px;
+            right: 12px;
+            border-radius: 50%; }
+        .tree-container .tree ul li.node.transitioning-node {
+          pointer-events: none; }
+        .tree-container .tree ul li.node .node-contents .toggler {
+          display: inline-block;
+          vertical-align: middle;
+          width: 22px;
+          height: 22px;
+          margin: -4px 0 0 -2px;
+          opacity: 0;
+          transform: rotate(-90deg);
+          transform-origin: center center; }
+          .tree-container .tree ul li.node .node-contents .toggler svg {
+            position: absolute;
+            width: 9px;
+            height: 6px;
+            top: 9px;
+            right: 8px;
+            fill: #ADB8BC; }
+          .tree-container .tree ul li.node .node-contents .toggler.expanded {
+            transform: rotate(0deg); }
+          .tree-container .tree ul li.node .node-contents .toggler.leaf {
+            visibility: hidden !important; }
+        .tree-container .tree ul li.node .label-mask {
+          background-image: -webkit-linear-gradient(left, rgba(57, 60, 64, 0) 0%, #393C40 90%);
+          background-image: linear-gradient(to right, rgba(57, 60, 64, 0) 0%, #393C40 90%); }
+          .tree-container .tree ul li.node .label-mask.indicator {
+            background-image: -webkit-linear-gradient(left, rgba(57, 60, 64, 0) 0%, #393C40 50%);
+            background-image: linear-gradient(to right, rgba(57, 60, 64, 0) 0%, #393C40 50%); }
+        .tree-container .tree ul li.node.placeholder.transition-placeholder, .tree-container .tree ul li.node.transition-placeholder.transition-placeholder {
+          background-color: #2D3135; }
+        .tree-container .tree ul li.node.placeholder *, .tree-container .tree ul li.node.transition-placeholder * {
+          display: none; }
+        .tree-container .tree ul li.node.transient {
+          pointer-events: none;
+          overflow: hidden;
+          border: 1px dashed #616D7A;
+          border-radius: 2px;
+          background-color: #2D3135; }
+          .tree-container .tree ul li.node.transient div.label-mask {
+            background-image: -webkit-linear-gradient(left, rgba(45, 49, 53, 0) 0%, #2D3135 90%);
+            background-image: linear-gradient(to right, rgba(45, 49, 53, 0) 0%, #2D3135 90%); }
+            .tree-container .tree ul li.node.transient div.label-mask:after {
+              display: none; }
+          .tree-container .tree ul li.node.transient .node-contents {
+            margin-left: -1px; }
+        .tree-container .tree ul li.node.fading-node {
+          height: 0; }
+        .tree-container .tree ul li.node.selected {
+          background-color: #2D3135;
+          z-index: 1; }
+          .tree-container .tree ul li.node.selected:not(.placeholder) {
+            box-shadow: inset 4px 0 0 #EFF3F7; }
+          .tree-container .tree ul li.node.selected .label-mask {
+            background-image: -webkit-linear-gradient(left, rgba(45, 49, 53, 0) 0%, #2D3135 90%);
+            background-image: linear-gradient(to right, rgba(45, 49, 53, 0) 0%, #2D3135 90%); }
+            .tree-container .tree ul li.node.selected .label-mask.indicator {
+              background-image: -webkit-linear-gradient(left, rgba(45, 49, 53, 0) 0%, #2D3135 50%);
+              background-image: linear-gradient(to right, rgba(45, 49, 53, 0) 0%, #2D3135 50%); }
+        .tree-container .tree ul li.node:hover svg.icon, .tree-container .tree ul li.node.selected svg.icon, .tree-container .tree ul li.node.transient svg.icon {
+          fill: #EFF3F7; }
+        .tree-container .tree ul li.node:hover .label, .tree-container .tree ul li.node.selected .label, .tree-container .tree ul li.node.transient .label {
+          color: #EFF3F7; }
+    .tree-container .tree:after {
+      position: absolute;
+      bottom: 0px;
+      content: '';
+      width: 100%;
+      display: block;
+      height: 0;
+      background: #FFE593;
+      opacity: .5; }
+    .tree-container .tree.editable:after {
+      height: 3px; }
+    .tree-container .tree.editable li.node.selected:not(.placeholder) {
+      box-shadow: inset 4px 0 0 #FFE593; }
+    .tree-container .tree.editable li.node.selected:not(.illegal) .label, .tree-container .tree.editable + .traveling-node.selected:not(.illegal) .label {
+      color: #FFE593; }
+    .tree-container .tree.editable li.node.selected:not(.illegal) .node-contents .icon, .tree-container .tree.editable li.node.selected:not(.illegal) .node-contents .toggler svg, .tree-container .tree.editable + .traveling-node.selected:not(.illegal) .node-contents .icon, .tree-container .tree.editable + .traveling-node.selected:not(.illegal) .node-contents .toggler svg {
+      fill: #FFE593; }
+    .tree-container .tree.editable.dragging li.node.selected.placeholder {
+      background-color: inherit; }
+    .tree-container .tree.editable.dragging li.node .toggler {
+      opacity: 0 !important; }
+    .tree-container .tree.editable:not(.filtered-results) li.node.movable:not(.root):not(.transient) {
+      cursor: move; }
+      .tree-container .tree.editable:not(.filtered-results) li.node.movable:not(.root):not(.transient):after {
+        content: "";
+        position: absolute;
+        width: 5px;
+        top: 13px;
+        right: 0;
+        height: .1em;
+        background: #555A5E;
+        box-shadow: 0 0.25em 0 0 #555A5E, 0 0.5em 0 0 #555A5E; }
+      .tree-container .tree.editable:not(.filtered-results) li.node.movable:not(.root):not(.transient):hover:after {
+        background: #EFF3F7;
+        box-shadow: 0 0.25em 0 0 #EFF3F7, 0 0.5em 0 0 #EFF3F7; }
+      .tree-container .tree.editable:not(.filtered-results) li.node.movable:not(.root):not(.transient).selected:hover:after {
+        background: #FFE593;
+        box-shadow: 0 0.25em 0 0 #FFE593, 0 0.5em 0 0 #FFE593; }
+    .tree-container .tree.forest-tree .node .node-contents {
+      padding-left: 8px; }
+    .tree-container .tree.filtered-results .toggler {
+      opacity: 0 !important; }

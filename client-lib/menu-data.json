@@ -1,0 +1,15 @@
+module.exports = [
+	{
+	  "id": 0,
+	  "label": "Menu"
+	},
+	{
+	  "id": 1,
+	  "parentId": 0,
+	  "label": "About Us",
+	  "url": "/about-us/brief-history.html",
+	  "image": "/img/about-us.png",
+	  "customClasses": "about-us"
+	}
+
+]
