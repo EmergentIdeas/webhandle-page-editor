@@ -1,0 +1,20 @@
+__::app_pre__
+<h1>Upload a File</h1>
+<p>This will upload a file to the /__sub__ directory.</p>
+<form method="post" action="/webhandle-page-editor/upload-file" enctype="multipart/form-data">
+	<input name="sub" type="hidden" value="__sub__" />
+	<label>File
+		<input name="fileContent" type="file" class="file-to-upload" required="required" />
+	</label>
+	<label>Name<br/>(Use only lower case letters, numbers, and dashes and a period (no upper case characters or symbols).
+		<input name="name" type="text" class="file-url-safe-characters-only" required="required" />
+	</label>
+	<br/><br/>
+	<button type="submit" class="btn btn-primary">Upload</button>
+</form>
+
+<h2>Files in the /__sub__ directory</h2>
+__files::./file-link__
+
+
+__::app_post__

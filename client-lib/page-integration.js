@@ -4,8 +4,8 @@ var menuMaker = require('./index')
 var integrate = function(selector) {
 	var container = $(selector)
 	if(container.length > 0) {
-		$.get('/admin/files/api/all-pages', function(pagesData) {
-			$.get('/admin/files/api/all-pages/main', function(treeData) {
+		$.get('/webhandle-page-editor/admin/files/api/all-pages', function(pagesData) {
+			$.get('/webhandle-page-editor/admin/files/api/all-pages/main', function(treeData) {
 				if(typeof treeData == 'string') {
 					treeData = JSON.parse(treeData)
 				}
@@ -14,7 +14,7 @@ var integrate = function(selector) {
 					treeData: treeData,
 					pages: pagesData,
 					writeBack: function(data) {
-						$.post('/admin/files/api/all-pages/main', {
+						$.post('/webhandle-page-editor/admin/files/api/all-pages/main', {
 							data: btoa(data)
 						})
 					}

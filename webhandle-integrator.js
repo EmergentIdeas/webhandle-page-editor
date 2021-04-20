@@ -71,7 +71,7 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	})
 	
 	let pagesDirectory = path.join(webhandle.projectRoot, 'pages')
-	webhandle.routers.primary.get('/admin/files/api/all-pages', (req, res, next) => {
+	router.get('/admin/files/api/all-pages', (req, res, next) => {
 		if(pageEditorService.isUserPageEditor(req)) {
 			find.file(/\.tri$/, pagesDirectory, (files) => {
 				files = files.map(file => {
@@ -94,8 +94,7 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	})
 	
 	let menuSink = new FileSink(path.join(webhandle.projectRoot, 'menus'))
-	
-	webhandle.routers.primary.get('/admin/files/api/all-pages/:menuName', async (req, res, next) => {
+	router.get('/admin/files/api/all-pages/:menuName', async (req, res, next) => {
 		if(pageEditorService.isUserPageEditor(req)) {
 			let content = await menuSink.read(req.params.menuName + '.json')
 			res.end(content)
@@ -106,7 +105,7 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		}
 	})
 
-	webhandle.routers.primary.post('/admin/files/api/all-pages/:menuName', async (req, res, next) => {
+	router.post('/admin/files/api/all-pages/:menuName', async (req, res, next) => {
 		if(pageEditorService.isUserPageEditor(req)) {
 			let data = JSON.stringify(JSON.parse(Buffer.from(req.body.data, 'base64')), null, '\t')
 			await menuSink.write(req.params.menuName + '.json', data)
@@ -124,12 +123,12 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	let pageSaveServer = createPageSaveServer(pagesSource)
 	router.use(pageSaveServer)
 	
-	webhandle.routers.primary.get('/admin/page-editor/menu-editor', (req, res, next) => {
+	router.get('/admin/page-editor/menu-editor', (req, res, next) => {
 		webhandle.pageServer.prerenderSetup(req, res, {}, () => {
 			res.render('webhandle-page-editor/tools/menu-editor')
 		})
 	})
-	webhandle.routers.primary.get('/admin/page-editor/create-page', (req, res, next) => {
+	router.get('/admin/page-editor/create-page', (req, res, next) => {
 		webhandle.pageServer.prerenderSetup(req, res, {}, () => {
 			webhandle.sinks.project.getFullFileInfo('page-templates', function(err, data) {
 				if(!err && data) {
@@ -150,7 +149,7 @@ let integrate = function(webhandle, pagesSource, router, options) {
 			})
 		})
 	})
-	webhandle.routers.primary.post('/admin/page-editor/create-page', async (req, res, next) => {
+	router.post('/admin/page-editor/create-page', async (req, res, next) => {
 		
 		let body = await webhandle.sinks.project.read(path.join('page-templates', req.body.templateName) + '.tri')
 		let meta = await webhandle.sinks.project.read(path.join('page-templates', req.body.templateName) + '.json')
@@ -162,6 +161,63 @@ let integrate = function(webhandle, pagesSource, router, options) {
 			res.redirect(path.join(req.body.destination, req.body.pageName))
 		})
 	})
+	
+
+	
+	router.get(/\/upload-file\/?.*/, (req, res) => {
+		let parts = req.originalUrl.split('/')
+		parts.shift()
+		parts.shift()
+		parts.shift()
+		let sub = parts.join('/')
+
+		webhandle.sinks.project.getFullFileInfo('public/' + sub, (err, files) => {
+			res.locals.files = files.children
+			res.locals.sub = sub
+			let subwithslash = ''
+			if(sub) {
+				if(sub[sub.length - 1] != '/') {
+					subwithslash = sub + '/'
+				}
+				else {
+					subwithslash = sub
+				}
+			}
+			else {
+				subwithslash = ''
+			}
+
+			res.locals.subwithslash = subwithslash
+			res.locals.files = res.locals.files.sort((one, two) => {
+				if(one.directory && !two.directory) {
+					return -1
+				}
+				if(!one.directory && two.directory) {
+					return 1
+				}
+				return two.name.toLowerCase() > one.name.toLowerCase() ? -1 : 1
+			})
+			res.render('webhandle-page-editor/tools/upload-file')
+		})
+		
+	})
+	router.post('/upload-file', (req, res, next) => {
+		let sub = req.body.sub
+		if(sub) {
+			sub += '/'
+		}
+		webhandle.sinks.project.write('public/' + sub + req.body.name, req.files[0].buffer, (err, data) => {
+			res.addFlashMessage('File Uploaded <a href="/' + sub + req.body.name + '">' + req.body.name + '</a>', () => {
+
+				if(sub) {
+					sub = '/' + sub
+				}
+				res.redirect('/webhandle-page-editor/upload-file' + sub)
+			})
+		})
+		
+	})
+		
 	
 	
 }

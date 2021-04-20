@@ -1,6 +1,6 @@
 __::app_pre__
 <h1>Create New Page</h1>
-<form action="/admin/page-editor/create-page" method="post">
+<form action="/webhandle-page-editor/admin/page-editor/create-page" method="post">
 	<label>New page name (must be lower case, dashes, and numbers)
 		<input name="pageName" type="text" />
 	</label>	
