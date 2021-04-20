@@ -10,7 +10,7 @@
 	<label>
 		<input type="radio" name="linkBy" value="url" /> url
 	</label>
-	<label class="page-label">Page
+	<label class="page-label">Page:
 		<select name="page">
 			<option value="">-- choose a page --</option>
 			

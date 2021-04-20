@@ -160,7 +160,7 @@ var menuMaker = function(options) {
 	$wrapper.find('.add').click(function(evt){
 		evt.preventDefault()
 		var selected = tree.selected()
-		var id = _.maxBy(tree.nodes, 'id').id + 1
+		var id = _.maxBy(Object.values(tree.nodes, 'id')).id + 1
 		
 		var parent
 		if(selected.id == 0) {

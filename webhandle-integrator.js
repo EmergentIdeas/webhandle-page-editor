@@ -82,6 +82,9 @@ let integrate = function(webhandle, pagesSource, router, options) {
 				.map(file => {
 					return file.substring(pagesDirectory.length)
 				})
+				.map(file => {
+					return {url: file, label: file}
+				})
 				res.json(files)
 			})
 		}
@@ -96,6 +99,18 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		if(pageEditorService.isUserPageEditor(req)) {
 			let content = await menuSink.read(req.params.menuName + '.json')
 			res.end(content)
+
+		}
+		else {
+			res.redirect('/login')
+		}
+	})
+
+	webhandle.routers.primary.post('/admin/files/api/all-pages/:menuName', async (req, res, next) => {
+		if(pageEditorService.isUserPageEditor(req)) {
+			let data = JSON.stringify(JSON.parse(Buffer.from(req.body.data, 'base64')), null, '\t')
+			await menuSink.write(req.params.menuName + '.json', data)
+			res.end('success')
 
 		}
 		else {

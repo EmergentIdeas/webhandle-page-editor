@@ -50,6 +50,7 @@
 		left: 0;
 		top: 80px;
 		box-sizing: border-box;
+		height: 700px;
 	}
 	
 	.controls {
@@ -66,7 +67,7 @@
 		top: 0;
 		right: 0;
 		bottom: 0;
-		left: @tree-width;
+		left: @tree-width + 40px;
 	}
 	
 	.option-properties {
@@ -85,6 +86,12 @@
 			border: solid 1px black;
 		}
 		
+		input[type=radio] {
+			display: inline-block;
+			width: auto;
+			margin-right: 20px;
+		}
+		
 		select {
 			display: block;
 			box-sizing: border-box;
@@ -95,4 +102,8 @@
 			border: solid 1px black;
 		}
 	}
+}
+.menu-editor-svgs {
+	height: 0;
+	overflow: hidden;
 }
