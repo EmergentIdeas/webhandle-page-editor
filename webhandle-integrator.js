@@ -33,6 +33,28 @@ let integrate = function(webhandle, pagesSource, router, options) {
 			}
 			return false
 		}
+		
+		/**
+		 * Returns a promise that's value is an array of strings with page file paths which
+		 * are relative to the pages directory.
+		 */
+		pageEditorService.getPageFiles = () => {
+			let p = new Promise((resolve, reject) => {
+				find.file(/\.tri$/, pagesDirectory, (files) => {
+					files = files.map(file => {
+						return file.substring(pagesDirectory.length)
+					})
+					resolve(files)
+				})
+				.error(err => {
+					if(err) {
+						reject(err)
+					}
+				})
+				
+			})
+			return p
+		}
 
 	}
 	
@@ -73,14 +95,11 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	let pagesDirectory = path.join(webhandle.projectRoot, 'pages')
 	router.get('/admin/files/api/all-pages', (req, res, next) => {
 		if(pageEditorService.isUserPageEditor(req)) {
-			find.file(/\.tri$/, pagesDirectory, (files) => {
+			pageEditorService.getPageFiles().then(files => {
 				files = files.map(file => {
 					let parts = file.split('.')
 					parts.pop()
 					return parts.join('.')
-				})
-				.map(file => {
-					return file.substring(pagesDirectory.length)
 				})
 				.map(file => {
 					return {url: file, label: file}
