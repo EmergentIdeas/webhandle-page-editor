@@ -1,5 +1,6 @@
 .webhandle-page-editor-tools {
 	position: fixed;
+	z-index: 120;
 	
 	bottom: 10px;
 	left: 10px;
@@ -24,11 +25,14 @@
 		&.start-editing {
 			display: block;
 		}
+		&.go-to-menu {
+			display: block;
+		}
 		
 		.editing-page & {
 			display: block;
 			
-			&.start-editing {
+			&.start-editing, &.go-to-menu {
 				display: none;
 			}
 		}

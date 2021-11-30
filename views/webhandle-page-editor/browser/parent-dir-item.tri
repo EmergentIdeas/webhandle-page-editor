@@ -1,6 +1,5 @@
 <li >
 	<a href="/webhandle-page-editor/files/browse/type/__$globals.fileTypes__?CKEditor=__$globals.CKEditor__&CKEditorFuncNum=__$globals.CKEditorFuncNum__&langCode=en&amp;path=__parent__">
-		<img src="/webhandle-page-editor/img/folder.png" />
-		__name__
+		<img src="/webhandle-page-editor/img/folder.png" />__name__
 	</a>
 </li>

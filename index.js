@@ -23,6 +23,7 @@ var pageEditorSetup = function(options) {
 	'<a href="#" title="Properties" class="property-button">P</a>' +
 	'<a href="#" title="Save" class="save-button">S</a>' +
 	'<a href="#" title="Edit Page" class="start-editing">E</a>' +
+	'<a href="/menu" title="Menu Page" class="go-to-menu">M</a>' +
 	'</div>')
 	
 	var enablePageSave = function() {

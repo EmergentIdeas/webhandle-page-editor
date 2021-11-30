@@ -17,6 +17,7 @@ const createPageInfoServer = require('./lib/create-page-info-server')
 let pageEditorService = {
 }
 
+let pagesDirectory;
 
 let integrate = function(webhandle, pagesSource, router, options) {
 	options = _.extend({}, options, {
@@ -92,7 +93,7 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		})
 	})
 	
-	let pagesDirectory = path.join(webhandle.projectRoot, 'pages')
+	pagesDirectory = path.join(webhandle.projectRoot, 'pages')
 	router.get('/admin/files/api/all-pages', (req, res, next) => {
 		if(pageEditorService.isUserPageEditor(req)) {
 			pageEditorService.getPageFiles().then(files => {
@@ -242,54 +243,104 @@ let integrate = function(webhandle, pagesSource, router, options) {
 }
 
 function createBrowseHandler(filter, fileTypes) {
-	return (req, res, next) => {
+	let pageEditor = webhandle.services.pageEditor
+	return async (req, res, next) => {
 		let fullSink = new FileSink(webhandle.staticPaths[0])
-		fullSink.getFullFileInfo(req.query.path || '').then((item) => {
-			let allowed = item.children.filter(filter)
+		let pageSink = new FileSink(pagesDirectory)
+		let item = {
+			children: []
+		}
+
+		let queryPath = req.query.path || ''
+		try {
+			item = await fullSink.getFullFileInfo(queryPath)
+		}
+		catch(e) {
+			// no big deal, the directory just doesn't exist
+		}
 			
-			allowed.sort(sortItems)
-			
-			let curPath = req.query.path
-			if(!curPath || curPath == '/') {
-				curPath = ''
-			}
-			
-			try {
-				if(curPath && (curPath != '' && curPath != '/')) {
-					res.locals.parent = {
-						name: '(parent directory)',
-						parent: path.dirname(curPath),
-						directory: true
+		try {
+			let pageFiles = await pageSink.getFullFileInfo(queryPath)
+			let pages = pageFiles.children.filter(page => {
+				return page.directory || page.name.endsWith('.tri') || page.name.endsWith('.html')
+			})
+			pages = pages.map(page => {
+				if(page.name.endsWith('.tri') || page.name.endsWith('.html')) {
+					let i = page.name.lastIndexOf('.')
+					page.name = page.name.substring(0, i)
+					if(page.name == 'index') {
+						page.relPath = page.relPath.substring(0, page.relPath.lastIndexOf('/'))
 					}
+					page.relPath = page.relPath.substring(0, page.relPath.lastIndexOf('.'))
 				}
-				else {
-					res.locals.parent = null
-				}
-			}
-			catch(e) {
-				log.error(e)
-			}
-			
-			allowed.forEach((item) => {
-				if(isNameImage(item.name)) {
-					item.thumbnail = curPath + '/' + item.name
-				}
-				else {
-					item.thumbnail = '/webhandle-page-editor/img/document.png';
-				}
+				return page
 			})
 			
-			res.locals.items = allowed
-			res.locals.path = curPath
-			res.locals.CKEditor = req.query.CKEditor
-			res.locals.CKEditorFuncNum = req.query.CKEditorFuncNum
-			res.locals.fileTypes = fileTypes
-			res.render('webhandle-page-editor/browser/items')
+			item.children.push(...pages)
+		}
+		catch(e) {
+			// no big deal, the directory just doesn't exist
+		}
+		
+		
+		let directories = []
+		
+		
+		let allowed = item.children.filter(child => {
+			if(child.directory) {
+				if(directories.includes(child.name)) {
+					return false
+				}
+				else {
+					directories.push(child.name)
+					return true
+				}
+
+			}
+			else {
+				return true
+			}
 		})
-		.catch( e => {
+		allowed = allowed.filter(filter)
+		
+		allowed.sort(sortItems)
+		
+		let curPath = req.query.path
+		if(!curPath || curPath == '/') {
+			curPath = ''
+		}
+		
+		try {
+			if(curPath && (curPath != '' && curPath != '/')) {
+				res.locals.parent = {
+					name: '(parent directory)',
+					parent: path.dirname(curPath),
+					directory: true
+				}
+			}
+			else {
+				res.locals.parent = null
+			}
+		}
+		catch(e) {
 			log.error(e)
-			next()
+		}
+		
+		allowed.forEach((item) => {
+			if(isNameImage(item.name)) {
+				item.thumbnail = curPath + '/' + item.name
+			}
+			else {
+				item.thumbnail = '/webhandle-page-editor/img/document.png';
+			}
 		})
+		
+		res.locals.items = allowed
+		res.locals.path = curPath
+		res.locals.CKEditor = req.query.CKEditor
+		res.locals.CKEditorFuncNum = req.query.CKEditorFuncNum
+		res.locals.fileTypes = fileTypes
+		res.render('webhandle-page-editor/browser/items')
 		
 		
 		
@@ -298,7 +349,7 @@ function createBrowseHandler(filter, fileTypes) {
 
 function isNameImage(name) {
 	let nameLower = name.toLowerCase()
-	if(nameLower.endsWith('.jpg') || nameLower.endsWith('.jpeg') || nameLower.endsWith('.png') || nameLower.endsWith('.gif')) {
+	if(nameLower.endsWith('.jpg') || nameLower.endsWith('.jpeg') || nameLower.endsWith('.png') || nameLower.endsWith('.webp') || nameLower.endsWith('.gif')) {
 		return true
 	}
 	return false
