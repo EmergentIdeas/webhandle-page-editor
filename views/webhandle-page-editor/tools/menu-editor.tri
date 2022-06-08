@@ -29,6 +29,11 @@ __::app_pre__
 	</svg>
 </div>
 
+<div class="page-editor-menu-selector">
+	<select name="menuSelector" >
+	</select>
+	
+</div>
 <h1>Edit Menu</h1>
 <div class="menu-editor-page-seg">
 </div>

@@ -137,6 +137,24 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		}
 	})
 	
+	router.get('/admin/files/api/all-menus', async (req, res, next) => {
+		if(pageEditorService.isUserPageEditor(req)) {
+			let content = await menuSink.getFullFileInfo('.')
+			let menuNames = content.children.map(child => {
+				return child.name
+			})
+			.filter(name => {
+				return name.endsWith('.json')
+			})
+			.map(name => {
+				return name.substring(0, name.length - 5)
+			})
+			res.json(menuNames)
+		}
+		else {
+			res.redirect('/login')
+		}
+	})
 	
 	let pageInfoServer = createPageInfoServer(pagesSource)
 	router.use(pageInfoServer)
