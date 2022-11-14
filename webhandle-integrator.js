@@ -156,11 +156,6 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		}
 	})
 	
-	let pageInfoServer = createPageInfoServer(pagesSource)
-	router.use(pageInfoServer)
-	let pageSaveServer = createPageSaveServer(pagesSource)
-	router.use(pageSaveServer)
-	
 	router.get('/admin/page-editor/menu-editor', (req, res, next) => {
 		webhandle.pageServer.prerenderSetup(req, res, {}, () => {
 			res.render('webhandle-page-editor/tools/menu-editor')
@@ -188,15 +183,16 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		})
 	})
 	router.post('/admin/page-editor/create-page', async (req, res, next) => {
-		
-		let body = await webhandle.sinks.project.read(path.join('page-templates', req.body.templateName) + '.tri')
-		let meta = await webhandle.sinks.project.read(path.join('page-templates', req.body.templateName) + '.json')
-		
-		webhandle.sinks.project.write(path.join('pages', req.body.destination, req.body.pageName) + '.tri', body)
-		webhandle.sinks.project.write(path.join('pages', req.body.destination, req.body.pageName) + '.json', meta)
-		
-		res.addFlashMessage('Page created', (err) => {
-			res.redirect(path.join(req.body.destination, req.body.pageName))
+		let body;  
+		let meta; 
+		webhandle.sinks.project.read(path.join('page-templates', req.body.templateName) + '.tri').then((data) => {
+			body = data
+			webhandle.sinks.project.read(path.join('page-templates', req.body.templateName) + '.json').then((data) => {
+				meta = data || "{}"
+				webhandle.sinks.project.write(path.join('pages', req.body.destination, req.body.pageName) + '.tri', body)
+				webhandle.sinks.project.write(path.join('pages', req.body.destination, req.body.pageName) + '.json', meta)
+				res.redirect(path.join(req.body.destination, req.body.pageName))
+			})
 		})
 	})
 	
@@ -256,6 +252,10 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		
 	})
 		
+	let pageInfoServer = createPageInfoServer(pagesSource)
+	router.use(pageInfoServer)
+	let pageSaveServer = createPageSaveServer(pagesSource)
+	router.use(pageSaveServer)
 	
 	
 }
