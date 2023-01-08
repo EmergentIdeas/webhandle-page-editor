@@ -20,9 +20,9 @@ var pageEditorSetup = function(options) {
 	$('head').append('<link rel="stylesheet" href="' + cssLocation + '" type="text/css" />');
 	
 	$('body').append('<div class="webhandle-page-editor-tools">' +
+	'<a href="#" title="Edit Page" class="start-editing">E</a>' +
 	'<a href="#" title="Properties" class="property-button">P</a>' +
 	'<a href="#" title="Save" class="save-button">S</a>' +
-	'<a href="#" title="Edit Page" class="start-editing">E</a>' +
 	'<a href="/menu" title="Menu Page" class="go-to-menu">M</a>' +
 	'</div>')
 	
@@ -48,6 +48,7 @@ var pageEditorSetup = function(options) {
 		startEditing: function() {
 			$('html').addClass('editing-page')
 			require('ckeditor')
+			CKEDITOR.disableAutoInline = true
 			
 			var index = 0
 			$(editableSelector).each(function() {
@@ -85,7 +86,7 @@ var pageEditorSetup = function(options) {
 		}
 	}
 	
-	$.get('/webhandle-page-editor' + window.location.pathname)
+	$.get('/webhandle-page-editor/admin/api/v1/page-properties' + window.location.pathname)
 	.done(function(data) {
 		monitor.pageInfo = data
 	})
@@ -107,7 +108,9 @@ var pageEditorSetup = function(options) {
 			alert('saved')
 		})
 	})
-	
+
+	/* The dialog based way of doing properties
+
 	$('.webhandle-page-editor-tools .property-button').click(function(evt) {
 		evt.preventDefault()
 		propertiesDialog = new Dialog({
@@ -138,6 +141,10 @@ var pageEditorSetup = function(options) {
 			}
 		})
 		propertiesDialog.open()
+	})
+	*/
+	$('.webhandle-page-editor-tools .property-button').on('click', function(evt) {
+		window.location = '/webhandle-page-editor/admin/page-editor/v1/page-properties' + window.location.pathname
 	})
 	
 }

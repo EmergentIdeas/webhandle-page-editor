@@ -8,7 +8,6 @@
 	a {
 		color: white;
 		background-color: #3c7cff;
-		display: block;
 		width: 60px;
 		height: 60px;
 		line-height: 60px;
@@ -25,6 +24,9 @@
 		&.start-editing {
 			display: block;
 		}
+		&.property-button {
+			display: block;
+		}
 		&.go-to-menu {
 			display: block;
 		}
@@ -32,7 +34,7 @@
 		.editing-page & {
 			display: block;
 			
-			&.start-editing, &.go-to-menu {
+			&.start-editing, &.go-to-menu, &.property-button {
 				display: none;
 			}
 		}
@@ -78,4 +80,18 @@
 	}
 }
 
+.disable-page-editor {
+	.webhandle-page-editor-tools {
+		.start-editing {
+			display: none;
+		}
+	}
+}
 
+.disable-property-editor {
+	.webhandle-page-editor-tools {
+		.property-button {
+			display: none;
+		}
+	}
+}

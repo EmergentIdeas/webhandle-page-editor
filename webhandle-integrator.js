@@ -13,6 +13,16 @@ let log = filog('webhandle-page-editor')
 const createPageSaveServer = require('./lib/create-page-save-server')
 const createUploadFileServer = require('./lib/create-upload-file-server')
 const createPageInfoServer = require('./lib/create-page-info-server')
+const createPageInfoRetriever = require('./lib/page-info-retriever')
+const createPageInfoSaver = require('./lib/page-info-saver')
+
+
+const formInjector = require('form-value-injector')
+function addFormInjector(req, res, focus) {
+	res.addFilter((chunk) => formInjector(chunk, focus))
+}
+
+
 
 let pageEditorService = {
 }
@@ -56,8 +66,22 @@ let integrate = function(webhandle, pagesSource, router, options) {
 			})
 			return p
 		}
+		
+		/** 
+		 * Returns a promise that is the page info object or null if there is no object
+		*/
+		pageEditorService.getPageInfo = createPageInfoRetriever(pagesSource)
 
+		/** 
+		 * Returns a promise that is the page info object after it is saved
+		*/
+		pageEditorService.savePageInfo = createPageInfoSaver(pagesSource)
 	}
+
+	let pageInfoServer = createPageInfoServer(pageEditorService.getPageInfo)
+	// router.use(pageInfoServer)
+	let pageSaveServer = createPageSaveServer(pagesSource)
+	router.use(pageSaveServer)
 	
 	// set a flag so that the pages can see if the editor is a page editor
 	webhandle.pageServer.preRun.push((req, res, next) => {
@@ -94,6 +118,8 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	})
 	
 	pagesDirectory = path.join(webhandle.projectRoot, 'pages')
+	
+	
 	router.get('/admin/files/api/all-pages', (req, res, next) => {
 		if(pageEditorService.isUserPageEditor(req)) {
 			pageEditorService.getPageFiles().then(files => {
@@ -156,6 +182,67 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		}
 	})
 	
+	router.use('/admin/api/v1/page-properties/', pageInfoServer)
+	router.get('/admin/page-editor/v1/page-properties/:pagePath(\\S{0,})', async (req, res, next) => {
+		let pagePath = req.params.pagePath
+		
+		try {
+			let pageInfo = await pageEditorService.getPageInfo(pagePath)
+			if(!pageInfo) {
+				pageInfo = {}
+			}
+			webhandle.pageServer.prerenderSetup(req, res, {}, () => {
+				res.locals.pagePath = pagePath
+				res.locals.actionPrefix = '/webhandle-page-editor/admin/page-editor/v1/page-properties/'
+				let propertiesTemplate = 'webhandle-page-editor/page-properties-editor/basic-properties'
+				if(pageInfo.editor && pageInfo.editor.propertiesTemplate) {
+					propertiesTemplate = pageInfo.editor.propertiesTemplate
+				}
+				addFormInjector(req, res, pageInfo)
+				res.render(propertiesTemplate)
+			})
+
+		}
+		catch(e) {
+			log.error(e)
+			webhandle.pageServer.prerenderSetup(req, res, {}, () => {
+				res.locals.pagePath = pagePath
+				res.render('webhandle-page-editor/page-properties-editor/no-page-for-properties')
+			})
+		}
+	})
+	router.post('/admin/page-editor/v1/page-properties/:pagePath(\\S{0,})', async (req, res, next) => {
+		let pagePath = req.params.pagePath
+		
+		try {
+			let pageInfo = await pageEditorService.getPageInfo(pagePath)
+			if(!pageInfo) {
+				pageInfo = {}
+			}
+			pageInfo = Object.assign(pageInfo, req.body)
+			pageInfo = await pageEditorService.savePageInfo(pagePath, pageInfo)
+
+			webhandle.pageServer.prerenderSetup(req, res, {}, () => {
+				res.addFlashMessage("Page properties updated", (err) => {
+					res.locals.pagePath = pagePath
+					res.locals.actionPrefix = '/webhandle-page-editor/admin/page-editor/v1/page-properties/'
+					let propertiesTemplate = 'webhandle-page-editor/page-properties-editor/basic-properties'
+					if(pageInfo.editor && pageInfo.editor.propertiesTemplate) {
+						propertiesTemplate = pageInfo.editor.propertiesTemplate
+					}
+					addFormInjector(req, res, pageInfo)
+					res.redirect(req.originalUrl)
+				})
+			})
+		}
+		catch(e) {
+			log.error(e)
+			webhandle.pageServer.prerenderSetup(req, res, {}, () => {
+				res.locals.pagePath = pagePath
+				res.render('webhandle-page-editor/page-properties-editor/no-page-for-properties')
+			})
+		}
+	})
 	router.get('/admin/page-editor/menu-editor', (req, res, next) => {
 		webhandle.pageServer.prerenderSetup(req, res, {}, () => {
 			res.render('webhandle-page-editor/tools/menu-editor')
@@ -252,10 +339,6 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		
 	})
 		
-	let pageInfoServer = createPageInfoServer(pagesSource)
-	router.use(pageInfoServer)
-	let pageSaveServer = createPageSaveServer(pagesSource)
-	router.use(pageSaveServer)
 	
 	
 }

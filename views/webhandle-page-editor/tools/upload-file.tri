@@ -1,6 +1,7 @@
 __::app_pre__
-<h1>Upload a File</h1>
-<p>This will upload a file to the /__sub__ directory.</p>
+<div class="webhandle-page-editor-file-browser">
+<h1>View Files</h1>
+<p>Uploaded files will go to the /__sub__ directory.</p>
 <form method="post" action="/webhandle-page-editor/upload-file" enctype="multipart/form-data">
 	<input name="sub" type="hidden" value="__sub__" />
 	<label>File
@@ -14,7 +15,11 @@ __::app_pre__
 </form>
 
 <h2>Files in the /__sub__ directory</h2>
-__files::./file-link__
 
+<div class="file-list">
+__files::./file-link__
+</div>
+
+</div>
 
 __::app_post__

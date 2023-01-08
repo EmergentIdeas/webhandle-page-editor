@@ -7,7 +7,6 @@
 .webhandle-page-editor-tools a {
   color: white;
   background-color: #3c7cff;
-  display: block;
   width: 60px;
   height: 60px;
   line-height: 60px;
@@ -23,6 +22,9 @@
 .webhandle-page-editor-tools a.start-editing {
   display: block;
 }
+.webhandle-page-editor-tools a.property-button {
+  display: block;
+}
 .webhandle-page-editor-tools a.go-to-menu {
   display: block;
 }
@@ -30,7 +32,8 @@
   display: block;
 }
 .editing-page .webhandle-page-editor-tools a.start-editing,
-.editing-page .webhandle-page-editor-tools a.go-to-menu {
+.editing-page .webhandle-page-editor-tools a.go-to-menu,
+.editing-page .webhandle-page-editor-tools a.property-button {
   display: none;
 }
 .page-editor-editable {
@@ -60,4 +63,10 @@
   min-width: 500px;
   border: solid 1px #888888;
   box-shadow: none;
+}
+.disable-page-editor .webhandle-page-editor-tools .start-editing {
+  display: none;
+}
+.disable-property-editor .webhandle-page-editor-tools .property-button {
+  display: none;
 }

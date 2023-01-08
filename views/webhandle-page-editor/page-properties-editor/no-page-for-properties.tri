@@ -1,0 +1,12 @@
+__::app_pre__
+<h1>Edit Page Properties</h1>
+
+<h2><a href="/__pagePath__">__true??pagePath || '/'__</a></h2>
+
+<p>
+	No page at this path could be found.
+</p>
+
+
+__::app_post__
+
