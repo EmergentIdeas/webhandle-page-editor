@@ -1,5 +1,11 @@
-<li >
-	<a href="javascript: window.opener.CKEDITOR.tools.callFunction(__$globals.CKEditorFuncNum__, '/__relPath__'); window.opener.focus(); window.close();">
-		<img src="__thumbnail__" />__name__
-	</a>
+<li class="" >
+	<span class="constrained-thumbnail">
+		<img src="__thumbnail__" />
+	</span>
+	<span class="item-info">
+		<a href="javascript: window.opener.CKEDITOR.tools.callFunction(__$globals.CKEditorFuncNum__, '/__relPath__'); window.opener.focus(); window.close();">
+			__name__
+		</a>
+		__variants.length > 0??this::./image-variants__
+	</span>
 </li>

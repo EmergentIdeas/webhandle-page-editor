@@ -53,13 +53,21 @@
 		list-style: none;
 		
 		li {
-			margin-bottom: 10px;
+			margin-bottom: 20px;
+			display: grid;
+			grid-template-columns: 200px auto;
+			column-gap: 20px;
+			
+			.item-info {
+				align-self: center;
+			}
+			.variants {
+				margin-top: 8px;
+			}
 			
 			img {
-				vertical-align: middle;
-				height: 50px;
-				padding-right: 30px;
-				max-width: 100px;
+				max-width: 100%;
+				max-height: 100px;
 			}
 		}
 	}

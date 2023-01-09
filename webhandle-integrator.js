@@ -22,6 +22,7 @@ function addFormInjector(req, res, focus) {
 	res.addFilter((chunk) => formInjector(chunk, focus))
 }
 
+let imageSizeExt = ['2x', 'quarter', 'half']
 
 
 let pageEditorService = {
@@ -402,6 +403,63 @@ function createBrowseHandler(filter, fileTypes) {
 				return true
 			}
 		})
+		
+		// condense the images into a single entry
+		let multiVersionImageBasenames = allowed.filter(item => item.name.endsWith('.json'))
+			.map(item => item.name.substring(0, item.name.length - ('.json'.length)))
+
+		// Creat a list of the primary images. This will not include webp files
+		let primaries = allowed.filter(item => {
+			let info = imageVariantInformation(item.name)
+			if(!info) {
+				return true
+			}
+			item.variantInfo = info
+			if(multiVersionImageBasenames.includes(info.baseName)) {
+				return info.size == 'std' && info.ext != 'webp'
+			}
+			return true
+		})	
+		
+		// gen a map of primary files by basename
+		let primaryByBasename = primaries.reduce((acc, item) => {
+			if(item.variantInfo) {
+				item.variants = []
+				acc[item.variantInfo.baseName] = item
+			}	
+			return acc
+		}, {})
+		
+		// Okay, put sometimes there isn't a jpg/png for the primary, so add it as a primary in that case
+		allowed.forEach(item => {
+			if(item.variantInfo) {
+				let primary = primaryByBasename[item.variantInfo.baseName]
+				if(!primary) {
+					if(item.variantInfo.size == 'std') {
+						primaries.push(item)
+						primaryByBasename[item.variantInfo.baseName] = item
+					}
+				}
+			}	
+		})
+		
+		// Add all the non-primary images as variants
+		allowed.forEach(item => {
+			if(item.variantInfo) {
+				let primary = primaryByBasename[item.variantInfo.baseName]
+				if(primary) {
+					if(item.variantInfo.size != 'std') {
+						primary.variants.push(item)
+					}
+					else if(item.variantInfo.ext != primary.variantInfo.ext) {
+						primary.variants.push(item)
+					}
+				}
+			}	
+		})
+		
+		allowed = primaries	
+		
 		allowed = allowed.filter(filter)
 		
 		allowed.sort(sortItems)
@@ -448,6 +506,27 @@ function createBrowseHandler(filter, fileTypes) {
 	}
 }
 
+function imageVariantInformation(name) {
+	if(!isNameImage(name)) {
+		return null
+	}
+	let info = {
+		size: 'std'
+	}
+	
+	info.ext = name.substring(name.lastIndexOf('.') + 1)
+	let noExt = name.substring(0, name.lastIndexOf('.'))
+	info.baseName = noExt
+	for(let size of imageSizeExt) {
+		let sizeString = '-' + size
+		if(noExt.endsWith(sizeString)) {
+			info.size = size	
+			info.baseName = noExt.substring(0, noExt.length - sizeString.length)
+			break
+		}
+	}
+	return info
+}
 function isNameImage(name) {
 	let nameLower = name.toLowerCase()
 	if(nameLower.endsWith('.jpg') || nameLower.endsWith('.jpeg') || nameLower.endsWith('.png') || nameLower.endsWith('.webp') || nameLower.endsWith('.gif')) {

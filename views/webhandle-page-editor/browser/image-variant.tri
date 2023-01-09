@@ -1,0 +1,4 @@
+<a
+	href="javascript: window.opener.CKEDITOR.tools.callFunction(__$globals.CKEditorFuncNum__, '/__relPath__'); window.opener.focus(); window.close();">
+	__variantInfo.ext__ (__variantInfo.size__)
+</a>
