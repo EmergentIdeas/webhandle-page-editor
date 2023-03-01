@@ -293,8 +293,42 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		parts.shift()
 		let sub = parts.join('/')
 
-		webhandle.sinks.project.getFullFileInfo('public/' + sub, (err, files) => {
-			res.locals.files = files.children
+		webhandle.sinks.project.getFullFileInfo('public/' + sub, async (err, files) => {
+			if(err) {
+				// The directory probably doesn't exist.
+				// that may be especially true if the errno is -2
+				res.locals.files = []
+			}
+			else {
+				res.locals.files = files.children
+			}
+			if(sub !== '') {
+				res.locals.files.push({
+					"name": "..",
+					"parent": "",
+					"stat": {
+					},
+					"directory": true,
+					"relPath": "public"
+				})
+			}
+			try {
+				let pages = (await webhandle.sinks.project.getFullFileInfo('pages/' + sub)).children
+				pages = pages.filter(page => page.directory || page.name.toLowerCase().endsWith('.tri') || page.name.toLowerCase().endsWith('.html') || page.name.toLowerCase().endsWith('.htm'))
+				pages.forEach(page => {
+					if(page.name.endsWith('.tri')) {
+						page.name = page.name.substring(0, page.name.length - 4)
+					}
+					if(page.name.endsWith('.html')) {
+						page.name = page.name.substring(0, page.name.length - 5)
+					}
+				})
+
+				res.locals.files.push(...pages)
+			}
+			catch(e) {
+				// probably that the directory didn't exist
+			}
 			res.locals.sub = sub
 			let subwithslash = ''
 			if(sub) {
@@ -340,6 +374,49 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		
 	})
 		
+	let templates = {}
+	webhandle.templateLoaders.push((name, callback) => {
+		callback(templates[name])
+	})
+
+	templates['webhandle-page-editor/icon-indicator-name'] = (fileName) => {
+		if(!fileName) {
+			return 'image'
+		}
+		fileName = fileName.toLowerCase()
+		if(
+			fileName.endsWith('.gif')
+			|| fileName.endsWith('.jpg')
+			|| fileName.endsWith('.jpeg')
+			|| fileName.endsWith('.png')
+			|| fileName.endsWith('.svg')
+			|| fileName.endsWith('.tiff')
+		) {
+			return 'image'
+		}
+		
+		
+		if(
+			fileName.endsWith('.tri')
+			|| fileName.endsWith('.doc')
+			|| fileName.endsWith('.docx')
+			|| fileName.endsWith('.pdf')
+			|| fileName.endsWith('.html')
+			|| fileName.endsWith('.htm')
+			|| fileName.endsWith('.xls')
+			|| fileName.endsWith('.xlsx')
+			|| fileName.endsWith('.ppt')
+			|| fileName.endsWith('.pptx')
+		) {
+			return 'description'
+		}
+		if( ! /\.....?$/.test(fileName)) {
+			return 'description'
+		}
+		
+		
+		return 'image'
+	}
 	
 	
 }
