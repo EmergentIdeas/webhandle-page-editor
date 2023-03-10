@@ -1,6 +1,6 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.21",
+  "version": "1.0.22",
   "description": "Edit web pages",
   "main": "index.js",
   "scripts": {
@@ -41,7 +41,7 @@
     "filter-log": "0.0.5",
     "find": "^0.3.0",
     "form-value-injector": "^1.0.6",
-    "kalpa-tree": "^4.1.1",
+    "kalpa-tree": "^3.4.0",
     "tripartite": "^1.0.15",
     "underscore": "^1.9.1",
     "webhandle-page-server": "^1.0.11"
