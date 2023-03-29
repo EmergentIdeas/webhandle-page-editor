@@ -144,7 +144,12 @@ var pageEditorSetup = function(options) {
 	})
 	*/
 	$('.webhandle-page-editor-tools .property-button').on('click', function(evt) {
-		window.location = '/webhandle-page-editor/admin/page-editor/v1/page-properties' + window.location.pathname
+		if(window.page && window.page.editor && window.page.editor.propertiesPage) {
+			window.location = window.page.editor.propertiesPage
+		}
+		else {
+			window.location = '/webhandle-page-editor/admin/page-editor/v1/page-properties' + window.location.pathname
+		}
 	})
 	
 }
