@@ -30,3 +30,39 @@ let securedRouter = require('webhandle-users/utils/allow-group')(
 webhandle.routers.primary.use('/webhandle-page-editor', securedRouter)
 
 ```
+
+Each page has a json file specifying certain elements. They have the general format of:
+
+```
+{
+	"editor": {
+		"propertiesTemplate": "rsf-page-properties"
+		,"disablePageEditor": true
+	},
+	"title": "The page titel",
+	"description": "The page description",
+	"pageVisibility": "public",
+	"socialImage": "",
+}
+```
+
+The properties template is some view. By default, and if not specified, this is:
+
+views/webhandle-page-editor/page-properties-editor/basic-properties.tri
+
+"disablePageEditor" if true will cause the "E" icon not to show.
+
+It's possible to change where the "P" icon directs to by adding something like this to the page:
+```
+<script>
+	window.page = {
+		editor: {
+			propertiesPage: "/news-items/__newsItem._id__/edit"
+		}
+	}
+</script>
+```
+
+
+
+
