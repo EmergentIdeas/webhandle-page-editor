@@ -47,7 +47,7 @@ var pageEditorSetup = function(options) {
 		sectionsContent: [],
 		startEditing: function() {
 			$('html').addClass('editing-page')
-			require('ckeditor')
+			require('ckeditor4')
 			CKEDITOR.disableAutoInline = true
 			
 			var index = 0

@@ -15,7 +15,7 @@ var serialize = function(tree, rootId, result) {
 }
 
 var treeMaker = function(treeData) {
-	var Tree = require('kalpa-tree')
+	var Tree = require('kalpa-tree').default
 	  , JSONStream = require('JSONStream')
 	  , tree
 	  , Readable = require('stream').Readable
