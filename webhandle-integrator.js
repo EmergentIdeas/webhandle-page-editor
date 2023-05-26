@@ -373,6 +373,19 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		})
 		
 	})
+	router.delete(/^\/delete-file\/(.*)/, async (req, res, next) => {
+		// let sub = req.body.sub
+		let sub = req.params[0]
+		try {
+			await webhandle.sinks.project.delete('public/' + sub)		
+			res.end('success')
+		}
+		catch(e) {
+			console.log(e)
+			log.error({error: e})
+			res.end('failure')
+		}
+	})
 		
 	let templates = {}
 	webhandle.templateLoaders.push((name, callback) => {
