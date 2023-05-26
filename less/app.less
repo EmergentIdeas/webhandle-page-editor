@@ -116,10 +116,21 @@
 
 .webhandle-page-editor-file-browser {
 	.file-list {
-		.directory-item {
+		.directory-item, .file-item {
 			.type-indicator {
 				vertical-align: middle;
 				padding-right: 10px;
+			}
+
+			.delete {
+				visibility: hidden;
+				cursor: pointer;
+			}
+
+			&:hover {
+				.delete {
+					visibility: visible;
+				}
 			}
 		}
 

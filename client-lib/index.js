@@ -6,6 +6,44 @@ var menuFrame = require('./menu-frame.tri')
 var optionProperties = require('./option-properties.tri')
 var _ = require('lodash')
 
+
+async function deleteFile(path) {
+
+	let resp = await fetch('/webhandle-page-editor/delete-file' + path,
+	{
+		method: 'DELETE'
+	})
+	let data = await resp.text()
+	return data == 'success'
+}
+let fileBrowserPage = document.querySelector('.webhandle-page-editor-file-browser')
+if(fileBrowserPage) {
+	let fileInput = fileBrowserPage.querySelector('input[name="fileContent"]')
+	if(fileInput) {
+		fileInput.addEventListener('change', (evt) => {
+			let files = evt.target.files
+			if (files.length > 0) {
+				let name = files[0].name
+				name = name.replace(/[^a-z0-9-.]/gi, '_').toLowerCase();
+				fileBrowserPage.querySelector('input[name="name"]').value = name
+			}
+		})
+	}
+
+	let deletes = fileBrowserPage.querySelectorAll('.file-item .delete')
+	deletes.forEach(del => {
+		del.addEventListener('click', async (evt) => {
+			let fileItem = evt.currentTarget.closest('.file-item')
+			let path = fileItem.getAttribute('data-path')
+			if(confirm(`Delete ${path}?`)) {
+				if(await deleteFile(path)) {
+					fileItem.parentElement.removeChild(fileItem)
+				}
+			}
+		})
+	})
+}
+
 var serialize = function(tree, rootId, result) {
 	_.each(tree.children(rootId), function(child) {
 		child.parentId = rootId

@@ -1,3 +1,3 @@
-<div class="directory-item">
-<span class="material-icons type-indicator"> __name::webhandle-page-editor/icon-indicator-name__
-	</span><a href="/__$globals.subwithslash____name__">__name__</a> </div>
+<div class="file-item" data-path="/__$globals.subwithslash + name::escAttr__">
+<span class="material-icons type-indicator">__name::webhandle-page-editor/icon-indicator-name__
+	</span><a href="/__$globals.subwithslash____name__">__name__</a> <span class="delete">&times;</span></div>

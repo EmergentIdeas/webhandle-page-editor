@@ -1,5 +1,4 @@
-<div class="directory-item">
+<div class="directory-item" data-path="/__$globals.subwithslash + name::escAttr__">
 	<span class="material-icons type-indicator"> folder 
-	</span><a href="/webhandle-page-editor/upload-file/__$globals.subwithslash____name__">
-	__name__ /</a>
+	</span><a href="/webhandle-page-editor/upload-file/__$globals.subwithslash____name__">__name__ /</a>
 </div>
