@@ -359,7 +359,7 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	})
 	router.post('/upload-file', (req, res, next) => {
 		let sub = req.body.sub
-		if(sub) {
+		if(sub && !sub.endsWith('/')) {
 			sub += '/'
 		}
 		webhandle.sinks.project.write('public/' + sub + req.body.name, req.files[0].buffer, (err, data) => {
@@ -377,7 +377,7 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		// let sub = req.body.sub
 		let sub = req.params[0]
 		try {
-			await webhandle.sinks.project.delete('public/' + sub)		
+			await webhandle.sinks.project.rm('public/' + sub)		
 			res.end('success')
 		}
 		catch(e) {
