@@ -373,6 +373,28 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		})
 		
 	})
+	router.post('/create-directory', async (req, res, next) => {
+		let sub = req.body.sub
+		if(sub && !sub.endsWith('/')) {
+			sub += '/'
+		}
+		let directoryName = req.body.directoryName
+		directoryName = directoryName.split('/').join('')
+		directoryName = directoryName.split('/').join('')
+		directoryName = directoryName.split('~').join('')
+		directoryName = directoryName.split('\\').join('')
+
+		await webhandle.sinks.project.mkdir('public/' + sub + '/' + directoryName)
+		res.addFlashMessage('Directory created ' + directoryName, () => {
+
+			if(sub) {
+				sub = '/' + sub 
+			}
+			sub += '/' + directoryName
+			res.redirect('/webhandle-page-editor/upload-file' + sub)
+		})
+		
+	})
 	router.delete(/^\/delete-file\/(.*)/, async (req, res, next) => {
 		// let sub = req.body.sub
 		let sub = req.params[0]

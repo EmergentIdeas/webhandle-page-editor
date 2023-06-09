@@ -1,24 +1,45 @@
 __::app_pre__
 <div class="webhandle-page-editor-file-browser">
-<h1>View Files</h1>
-<p>Uploaded files will go to the /__sub__ directory.</p>
-<form method="post" action="/webhandle-page-editor/upload-file" enctype="multipart/form-data">
-	<input name="sub" type="hidden" value="__sub__" />
-	<label>File
-		<input name="fileContent" type="file" class="file-to-upload" required="required"/>
-	</label>
-	<label>Name<br/>(Use only lower case letters, numbers, and dashes and a period (no upper case characters or symbols).
-		<input name="name" type="text" class="file-url-safe-characters-only" required="required" pattern="[a-z0-9-.]+"/>
-	</label>
-	<br/><br/>
-	<button type="submit" class="btn btn-primary">Upload</button>
-</form>
+	<h1>View Files</h1>
+	<p>Uploaded files will go to the /__sub__ directory.</p>
+	<form method="post" action="/webhandle-page-editor/upload-file" enctype="multipart/form-data">
+		<input name="sub" type="hidden" value="__sub__" />
+		<label>File
+			<input name="fileContent" type="file" class="file-to-upload" required="required" />
+		</label>
+		<label>
+			<input name="useFreeFormName" type="checkbox" /> I know it's wrong, but I want to use more characters in the
+			name.
+		</label>
+		<label>Name<br />(Use only lower case letters, numbers, and dashes and a period (no upper case characters or
+			symbols).
+			<input name="name" type="text" class="file-url-safe-characters-only" required="required"
+				pattern="[a-z0-9-.]+" />
+		</label>
+		<br /><br />
+		<button type="submit" class="btn btn-primary">Upload</button>
+	</form>
 
-<h2>Files in the /__sub__ directory</h2>
+	<h2>Files in the /__sub__ directory</h2>
 
-<div class="file-list">
-__files::./file-link__
-</div>
+	<div class="file-list">
+		__files::./file-link__
+	</div>
+
+
+	<div class="create-directory">
+		<h2>Create Directory</h2>
+		<form method="post" action="/webhandle-page-editor/create-directory">
+			<input name="sub" type="hidden" value="__sub__" />
+			<label>Directory name 
+				<br> (Use only letters, numbers, and dashes)
+			<input name="directoryName" type="text" pattern="[a-zA-Z0-9-]+"/>
+
+			<br /><br />
+			<button type="submit" class="btn btn-primary">Create</button>
+		</form>
+
+	</div>
 
 </div>
 

@@ -7,6 +7,8 @@ var optionProperties = require('./option-properties.tri')
 var _ = require('lodash')
 
 
+let filenamePattern = '[a-z0-9-.]+'
+
 async function deleteFile(path) {
 
 	let resp = await fetch('/webhandle-page-editor/delete-file' + path,
@@ -16,7 +18,18 @@ async function deleteFile(path) {
 	let data = await resp.text()
 	return data == 'success'
 }
+
+
 let fileBrowserPage = document.querySelector('.webhandle-page-editor-file-browser')
+
+function getAllowNonstandardNameValue() {
+	let check = fileBrowserPage.querySelector('input[name="useFreeFormName"]')
+	if(check) {
+		return check.checked
+	}
+	return false
+}
+
 if(fileBrowserPage) {
 	let fileInput = fileBrowserPage.querySelector('input[name="fileContent"]')
 	if(fileInput) {
@@ -24,7 +37,9 @@ if(fileBrowserPage) {
 			let files = evt.target.files
 			if (files.length > 0) {
 				let name = files[0].name
-				name = name.replace(/[^a-z0-9-.]/gi, '_').toLowerCase();
+				if(!getAllowNonstandardNameValue()) {
+					name = name.replace(/[^a-z0-9-.]/gi, '-').toLowerCase();
+				}
 				fileBrowserPage.querySelector('input[name="name"]').value = name
 			}
 		})
@@ -42,6 +57,12 @@ if(fileBrowserPage) {
 			}
 		})
 	})
+	let check = fileBrowserPage.querySelector('input[name="useFreeFormName"]')
+	if(check) {
+		check.addEventListener('change', (evt) => {
+			fileBrowserPage.querySelector('input[name="name"]') .setAttribute('pattern', getAllowNonstandardNameValue() ? '.*' : filenamePattern)
+		})
+	}
 }
 
 var serialize = function(tree, rootId, result) {
@@ -52,49 +73,8 @@ var serialize = function(tree, rootId, result) {
 	})
 }
 
-var treeMaker = function(treeData) {
-	var Tree = require('kalpa-tree').default
-	  , JSONStream = require('JSONStream')
-	  , tree
-	  , Readable = require('stream').Readable
-	  , i = 0
-	  
-	  var stream = new Readable({objectMode: true})
-		, clone = JSON.parse(JSON.stringify(treeData)) // poor man's clone
 
-	  stream._read = function () {
-		if (clone[i]) {
-		  return stream.push(clone[i++])
-		}
-		stream.push(null)
-	  }
-
-	tree = new Tree({
-	  stream: stream,
-	  accessors: {
-		icon: 'nodeType'
-	  },
-	  initialSelection: 0
-	})
-
-	tree.on('error', function (e) {
-	  console.log('tree error', e)
-	})
-
-	tree.on('move', function (node, newParent, previousParent, newIndex, prevIndex) {
-		node.parentId = newParent.id
-	})
-	
-	tree.serialize = function() {
-		var result = []
-		result.push(tree.get(0))
-		serialize(tree, 0, result)
-		return JSON.stringify(result)
-	}
-
-	return tree
-}
-
+var treeMaker = require('./tree-maker')
 
 
 

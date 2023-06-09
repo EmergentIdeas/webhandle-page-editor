@@ -1,6 +1,6 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "description": "Edit web pages",
   "main": "index.js",
   "scripts": {
@@ -37,7 +37,7 @@
     "composite-file-list": "^1.0.2",
     "ei-dialog": "^1.0.3",
     "ei-pic-browser": "^1.0.9",
-    "file-sink": "^1.0.6",
+    "file-sink": "^1.0.7",
     "filter-log": "0.0.5",
     "find": "^0.3.0",
     "form-value-injector": "^1.0.6",
