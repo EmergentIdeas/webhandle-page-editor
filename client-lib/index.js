@@ -4,7 +4,6 @@ var $ = require('jquery')
 
 var menuFrame = require('./menu-frame.tri')
 var optionProperties = require('./option-properties.tri')
-var _ = require('lodash')
 
 
 let filenamePattern = '[a-z0-9-.]+'
@@ -65,14 +64,6 @@ if(fileBrowserPage) {
 	}
 }
 
-var serialize = function(tree, rootId, result) {
-	_.each(tree.children(rootId), function(child) {
-		child.parentId = rootId
-		result.push(child)
-		serialize(tree, child.id, result)
-	})
-}
-
 
 var treeMaker = require('./tree-maker')
 
@@ -101,7 +92,10 @@ var menuMaker = function(options) {
 		$wrapper.find('.properties-side').html(optionProperties())
 		$wrapper.find('input[name=label]').val(node.label)
 		if(options.pages) {
-			_.each(_.sortBy(options.pages, 'label'), function(page) {
+			options.pages.sort((one, two) => {
+				return one.label > two.label ? 1 : -1
+			})
+			options.pages.forEach(function(page) {
 				$wrapper.find('select[name=page]').append('<option value="' + page.url + '">' + page.label + "</option>")
 			})
 		}
@@ -178,7 +172,7 @@ var menuMaker = function(options) {
 	$wrapper.find('.add').click(function(evt){
 		evt.preventDefault()
 		var selected = tree.selected()
-		var id = _.maxBy(Object.values(tree.nodes), 'id').id + 1
+		var id = Object.values(tree.nodes).reduce( (acc, item) => item.id > acc ? item.id : acc, 0) + 1
 		
 		var parent
 		if(selected.id == 0) {

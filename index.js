@@ -47,39 +47,53 @@ var pageEditorSetup = function(options) {
 		sectionsContent: [],
 		startEditing: function() {
 			$('html').addClass('editing-page')
-			require('ckeditor4')
-			CKEDITOR.disableAutoInline = true
-			
-			var index = 0
-			$(editableSelector).each(function() {
-				var i = index++
-				var id = 'e' + i
-				monitor.sectionsContent.push($(this).html())
-				$(this).attr('contenteditable', "true").attr('id', id).addClass('page-editor-editable')
-				var editorOptions = {
-					on: {
-						change: function(event) {
-							checkEditorDirtyAndSetContent(event, i)
-						},
-						blur: function( event ) {
-							checkEditorDirtyAndSetContent(event, i);
+
+			function setupCK() {
+				CKEDITOR.disableAutoInline = true
+				
+				var index = 0
+				$(editableSelector).each(function() {
+					var i = index++
+					var id = 'e' + i
+					monitor.sectionsContent.push($(this).html())
+					$(this).attr('contenteditable', "true").attr('id', id).addClass('page-editor-editable')
+					var editorOptions = {
+						on: {
+							change: function(event) {
+								checkEditorDirtyAndSetContent(event, i)
+							},
+							blur: function( event ) {
+								checkEditorDirtyAndSetContent(event, i);
+							}
 						}
 					}
-				}
-				if(options.configFile) {
-					editorOptions.customConfig = options.configFile
-				}
-				CKEDITOR.inline(id, editorOptions) 
-				
-				var ckDrop = new CKEditorDrop('#' + id)
-				if(options.fileFunctionsPrefix) {
-					ckDrop.fileUploadUrlPrefix = options.fileFunctionsPrefix + ckDrop.fileUploadUrlPrefix
-				}
-				// ckDrop.imageLayouts = pageEditorConfiguration.imageLayouts || []
-				ckDrop.imageLayouts = []
-				ckDrop.render()
+					if(options.configFile) {
+						editorOptions.customConfig = options.configFile
+					}
+					CKEDITOR.inline(id, editorOptions) 
+					
+					var ckDrop = new CKEditorDrop('#' + id)
+					if(options.fileFunctionsPrefix) {
+						ckDrop.fileUploadUrlPrefix = options.fileFunctionsPrefix + ckDrop.fileUploadUrlPrefix
+					}
+					// ckDrop.imageLayouts = pageEditorConfiguration.imageLayouts || []
+					ckDrop.imageLayouts = []
+					ckDrop.render()
 
-			})
+				})
+			}
+			if(window.CKEDITOR) {
+				setupCK()
+			}
+			else {
+				let ckscript = document.createElement('script');
+				ckscript.setAttribute('src','/ckeditor.js');
+				ckscript.onload = function() {
+					setupCK()
+				}
+				document.head.appendChild(ckscript)
+			}
+
 		},
 		getSections: function() {
 			return this.sectionsContent
