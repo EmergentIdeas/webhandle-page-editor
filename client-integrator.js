@@ -1,4 +1,4 @@
-
+window.CKEDITOR_BASEPATH = '/ckeditor/'
 
 var CKEditorDrop = require('ei-pic-browser/ckeditor-drop')
 var PicUpload = require('ei-pic-browser/pic-upload')
@@ -87,7 +87,7 @@ var pageEditorSetup = function(options) {
 			}
 			else {
 				let ckscript = document.createElement('script');
-				ckscript.setAttribute('src','/ckeditor.js');
+				ckscript.setAttribute('src','/ckeditor/ckeditor.js');
 				ckscript.onload = function() {
 					setupCK()
 				}

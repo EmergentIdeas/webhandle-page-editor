@@ -90,9 +90,8 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		next()
 	})
 	
-	webhandle.addStaticDir(path.join(webhandle.projectRoot, 'node_modules/ckeditor4'))
-	webhandle.addStaticDir(path.join(webhandle.projectRoot, 'node_modules/webhandle-page-editor/public'))
-	webhandle.addStaticDir(path.join(webhandle.projectRoot, 'node_modules/webhandle-page-editor/node_modules/ckeditor4'))
+	webhandle.addStaticDir(path.join(webhandle.projectRoot, 'node_modules/ckeditor4'), {urlPrefix: '/ckeditor'})
+	webhandle.addStaticDir(path.join(webhandle.projectRoot, 'node_modules/webhandle-page-editor/public/webhandle-page-editor'), {urlPrefix: '/webhandle-page-editor'})
 	webhandle.addTemplateDir(path.join(webhandle.projectRoot, 'node_modules/webhandle-page-editor/views'))
 
 	let sink = new FileSink(path.join(webhandle.staticPaths[0], 'img'))

@@ -1,8 +1,9 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "Edit web pages",
-  "main": "index.js",
+  "main": "webhandle-integrator.js",
+  "browser": "client-integrator.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "less-build": "lessc less/page-editor.less > public/webhandle-page-editor/css/page-editor.css"
@@ -45,6 +46,9 @@
     "tripartite": "^1.0.15",
     "underscore": "^1.9.1",
     "webhandle-page-server": "^1.0.11"
+  },
+  "peerDependencies": {
+    "webhandle": ">=1.0.27"
   },
   "browserify": {
     "transform": [
