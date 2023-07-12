@@ -1,10 +1,8 @@
 
 const path = require('path')
-const fs = require('fs')
 const filog = require('filter-log')
 const _ = require('underscore')
 const FileSink = require('file-sink')
-const cheerio = require('cheerio')
 const find = require('find')
 
 
@@ -13,8 +11,7 @@ let log = filog('webhandle-page-editor')
 const createPageSaveServer = require('./lib/create-page-save-server')
 const createUploadFileServer = require('./lib/create-upload-file-server')
 const createPageInfoServer = require('./lib/create-page-info-server')
-const createPageInfoRetriever = require('./lib/page-info-retriever')
-const createPageInfoSaver = require('./lib/page-info-saver')
+const PageEditorService = require('./lib/page-editor-service')
 
 
 const formInjector = require('form-value-injector')
@@ -25,58 +22,24 @@ function addFormInjector(req, res, focus) {
 let imageSizeExt = ['2x', 'quarter', 'half']
 
 
-let pageEditorService = {
-}
+let pageEditorService 
 
 let pagesDirectory;
 
+
 let integrate = function(webhandle, pagesSource, router, options) {
-	options = _.extend({}, options, {
+	options = _.extend({
 		editorGroups: ['administrators', 'page-editors']
-	})
+		, defaultPropertyTemplate: 'webhandle-page-editor/page-properties-editor/basic-properties'
+		, operationPrefix: '/webhandle-page-editor/admin/page-editor/v1/page-operation/'
+		, actionPrefix: '/webhandle-page-editor/admin/page-editor/v1/page-properties/'
+	}, options)
+	
+	
+	pagesDirectory = path.join(webhandle.projectRoot, 'pages')
 	
 	if(!webhandle.services.pageEditor) {
-		webhandle.services.pageEditor = pageEditorService
-		
-		pageEditorService.isUserPageEditor = function(req) {
-			log.error(req.user)
-			if(req.user && req.user.groups && _.intersection(req.user.groups, options.editorGroups).length > 0) {
-				return true
-			}
-			return false
-		}
-		
-		/**
-		 * Returns a promise that's value is an array of strings with page file paths which
-		 * are relative to the pages directory.
-		 */
-		pageEditorService.getPageFiles = () => {
-			let p = new Promise((resolve, reject) => {
-				find.file(/\.tri$/, pagesDirectory, (files) => {
-					files = files.map(file => {
-						return file.substring(pagesDirectory.length)
-					})
-					resolve(files)
-				})
-				.error(err => {
-					if(err) {
-						reject(err)
-					}
-				})
-				
-			})
-			return p
-		}
-		
-		/** 
-		 * Returns a promise that is the page info object or null if there is no object
-		*/
-		pageEditorService.getPageInfo = createPageInfoRetriever(pagesSource)
-
-		/** 
-		 * Returns a promise that is the page info object after it is saved
-		*/
-		pageEditorService.savePageInfo = createPageInfoSaver(pagesSource)
+		webhandle.services.pageEditor = pageEditorService = new PageEditorService({pagesDirectory, pagesSource, editorGroups: options.editorGroups})
 	}
 
 	let pageInfoServer = createPageInfoServer(pageEditorService.getPageInfo)
@@ -117,7 +80,6 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		})
 	})
 	
-	pagesDirectory = path.join(webhandle.projectRoot, 'pages')
 	
 	
 	router.get('/admin/files/api/all-pages', (req, res, next) => {
@@ -191,13 +153,15 @@ let integrate = function(webhandle, pagesSource, router, options) {
 			if(!pageInfo) {
 				pageInfo = {}
 			}
-			webhandle.pageServer.prerenderSetup(req, res, {}, () => {
+			webhandle.pageServer.prerenderSetup(req, res, {}, async () => {
 				res.locals.pagePath = pagePath
-				res.locals.actionPrefix = '/webhandle-page-editor/admin/page-editor/v1/page-properties/'
-				let propertiesTemplate = 'webhandle-page-editor/page-properties-editor/basic-properties'
+				res.locals.actionPrefix = options.actionPrefix
+				res.locals.operationPrefix = options.operationPrefix
+				let propertiesTemplate = options.defaultPropertyTemplate
 				if(pageInfo.editor && pageInfo.editor.propertiesTemplate) {
 					propertiesTemplate = pageInfo.editor.propertiesTemplate
 				}
+				res.locals.pageDirectories = await pageEditorService.getPageDirectories()
 				addFormInjector(req, res, pageInfo)
 				res.render(propertiesTemplate)
 			})
@@ -225,8 +189,9 @@ let integrate = function(webhandle, pagesSource, router, options) {
 			webhandle.pageServer.prerenderSetup(req, res, {}, () => {
 				res.addFlashMessage("Page properties updated", (err) => {
 					res.locals.pagePath = pagePath
-					res.locals.actionPrefix = '/webhandle-page-editor/admin/page-editor/v1/page-properties/'
-					let propertiesTemplate = 'webhandle-page-editor/page-properties-editor/basic-properties'
+					res.locals.actionPrefix = options.actionPrefix
+					res.locals.operationPrefix = options.operationPrefix
+					let propertiesTemplate = options.defaultPropertyTemplate
 					if(pageInfo.editor && pageInfo.editor.propertiesTemplate) {
 						propertiesTemplate = pageInfo.editor.propertiesTemplate
 					}
@@ -234,6 +199,52 @@ let integrate = function(webhandle, pagesSource, router, options) {
 					res.redirect(req.originalUrl)
 				})
 			})
+		}
+		catch(e) {
+			log.error(e)
+			webhandle.pageServer.prerenderSetup(req, res, {}, () => {
+				res.locals.pagePath = pagePath
+				res.render('webhandle-page-editor/page-properties-editor/no-page-for-properties')
+			})
+		}
+	})
+
+	router.post('/admin/page-editor/v1/page-operation/move:pagePath(\\S{0,})', async (req, res, next) => {
+		function trimSlashes(path) {
+			while(path.startsWith('/')) {
+				path = path.substring(1)
+			}
+			while(path.endsWith('/')) {
+				path = path.substring(0, path.length - 1)
+			}
+			
+			return path
+		}
+		let pagePath = req.params.pagePath
+		if(pagePath == '' || !pagePath || pagePath == '/') {
+			pagePath = 'index'
+		}
+		let pageName = pagePath.split('/').pop()
+		let destinationDir = req.body.pageDestination
+		let pageDestination = `${destinationDir}/${pageName}`
+		
+		pageDestination = trimSlashes(pageDestination)
+		pagePath = trimSlashes(pagePath)
+		
+		
+		try {
+			if(pagePath == pageDestination) {
+				res.addFlashMessage("Page name is the same", (err) => {
+					res.redirect(options.actionPrefix + pageDestination)
+				})
+			}
+			else {
+				await pageEditorService.movePage(pagePath, pageDestination)
+
+				res.addFlashMessage("Page moved", (err) => {
+					res.redirect(options.actionPrefix + pageDestination)
+				})
+			}
 		}
 		catch(e) {
 			log.error(e)
