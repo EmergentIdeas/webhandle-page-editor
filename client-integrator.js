@@ -6,12 +6,22 @@ var Dialog = require('ei-dialog')
 var inputTemplate = require('./input-template.tri')
 var textareaTemplate = require('./textarea-template.tri')
 
+const FileSinkRemoteHTTP = require('file-sink-remote-http')
+
 var propertiesDialog
 
 var pageEditorSetup = function(options) {
 	
 	var $ = jQuery
 	options = options || {}
+	
+	let webhandle = window.webhandle = window.webhandle || {}
+
+	webhandle.sinks = webhandle.sinks || {}
+	webhandle.sinks.public = new FileSinkRemoteHTTP('/webhandle-page-editor/admin/page-editor/v1/file-resources/public')
+	webhandle.sinks.pages = new FileSinkRemoteHTTP('/webhandle-page-editor/admin/page-editor/v1/file-resources/pages')
+	
+
 	
 	var cssLocation = '/webhandle-page-editor/css/page-editor.css'
 	var editableSelector = '.edit-content-inline'

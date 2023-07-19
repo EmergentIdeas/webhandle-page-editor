@@ -1,6 +1,6 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.29",
+  "version": "1.0.30",
   "description": "Edit web pages",
   "main": "webhandle-integrator.js",
   "browser": "client-integrator.js",
@@ -32,6 +32,7 @@
     "uglify-js": "^3.4.2"
   },
   "dependencies": {
+    "@dankolz/picture-ckeditor-plugin": "^1.0.0",
     "@dankolz/webhandle-admin-icons": "^1.0.0",
     "cheerio": "^1.0.0-rc.2",
     "ckeditor4": "^4.21.0",
@@ -39,6 +40,8 @@
     "ei-dialog": "^1.0.3",
     "ei-pic-browser": "^1.0.9",
     "file-sink": "^1.0.7",
+    "file-sink-remote-http": "^1.0.0",
+    "file-sink-server": "^1.0.3",
     "filter-log": "0.0.5",
     "find": "^0.3.0",
     "form-value-injector": "^1.0.6",

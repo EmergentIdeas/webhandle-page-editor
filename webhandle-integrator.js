@@ -3,15 +3,19 @@ const path = require('path')
 const filog = require('filter-log')
 const _ = require('underscore')
 const FileSink = require('file-sink')
+const FileSinkServer = require('file-sink-server')
 const find = require('find')
+const express = require('express')
 
 
 let log = filog('webhandle-page-editor')
+const setupFlexPicture = require('@dankolz/picture-ckeditor-plugin/server-js/integrate')
 
 const createPageSaveServer = require('./lib/create-page-save-server')
 const createUploadFileServer = require('./lib/create-upload-file-server')
 const createPageInfoServer = require('./lib/create-page-info-server')
 const PageEditorService = require('./lib/page-editor-service')
+
 
 
 const formInjector = require('form-value-injector')
@@ -25,6 +29,8 @@ let imageSizeExt = ['2x', 'quarter', 'half']
 let pageEditorService 
 
 let pagesDirectory;
+let fullSink
+let pageSink
 
 
 let integrate = function(webhandle, pagesSource, router, options) {
@@ -56,12 +62,17 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	webhandle.addStaticDir(path.join(webhandle.projectRoot, 'node_modules/ckeditor4'), {urlPrefix: '/ckeditor'})
 	webhandle.addStaticDir(path.join(webhandle.projectRoot, 'node_modules/webhandle-page-editor/public/webhandle-page-editor'), {urlPrefix: '/webhandle-page-editor'})
 	webhandle.addTemplateDir(path.join(webhandle.projectRoot, 'node_modules/webhandle-page-editor/views'))
+	
+	
+	setupFlexPicture()
 
+	fullSink = new FileSink(webhandle.staticPaths[0])
+	pageSink = new FileSink(pagesDirectory)
+	let publicFolderSink = new FileSink(webhandle.staticPaths[0])
 	let sink = new FileSink(path.join(webhandle.staticPaths[0], 'img'))
 	let uploadServer = createUploadFileServer(sink)
 	router.use('/files/upload-file', uploadServer)
 	
-	let publicFolderSink = new FileSink(webhandle.staticPaths[0])
 	let oldStyleUploadServer = createUploadFileServer(publicFolderSink)
 	router.use(/\/files\/upload(.*)/, oldStyleUploadServer)
 	
@@ -143,6 +154,26 @@ let integrate = function(webhandle, pagesSource, router, options) {
 			res.redirect('/login')
 		}
 	})
+	
+	// Setup file sink servers for resources 
+	let fileSinkServerAuth = async (path, req) => {
+		return pageEditorService.isUserPageEditor(req)
+	}
+	function createFileSinkServer(sink, name) {
+		let publicFileSinkServer = new FileSinkServer(sink, {
+			authorizationProvider: fileSinkServerAuth
+		})
+		let publicSinkRouter = express.Router()
+		publicFileSinkServer.addToRouter(publicSinkRouter)
+		
+		router.use('/admin/page-editor/v1/file-resources/' + name, publicSinkRouter)
+
+	}
+	createFileSinkServer(publicFolderSink, 'public')
+	createFileSinkServer(pageSink, 'pages')
+	
+	
+	
 	
 	router.use('/admin/api/v1/page-properties/', pageInfoServer)
 	router.get('/admin/page-editor/v1/page-properties/:pagePath(\\S{0,})', async (req, res, next) => {
@@ -469,8 +500,6 @@ let integrate = function(webhandle, pagesSource, router, options) {
 function createBrowseHandler(filter, fileTypes) {
 	let pageEditor = webhandle.services.pageEditor
 	return async (req, res, next) => {
-		let fullSink = new FileSink(webhandle.staticPaths[0])
-		let pageSink = new FileSink(pagesDirectory)
 		let item = {
 			children: []
 		}
