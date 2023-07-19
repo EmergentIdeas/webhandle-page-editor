@@ -29,6 +29,8 @@ CKEDITOR.editorConfig = function( config ) {
 	// not needed in the Standard(s) toolbar.
 	config.removeButtons = 'Underline,Subscript,Superscript';
 
+	config.removePlugins = 'image';
+
 	// Set the most common block elements.
 	config.format_tags = 'p;h1;h2;h3;pre';
 
@@ -39,8 +41,27 @@ CKEDITOR.editorConfig = function( config ) {
 	config.filebrowserBrowseUrl = '/webhandle-page-editor/files/browse/type/all'
 	config.filebrowserImageBrowseUrl = '/webhandle-page-editor/files/browse/type/image'
 	config.filebrowserUploadUrl = '/webhandle-page-editor/files/upload-file?action=upload'
-	config.allowedContent = "p h1 h2 h3 h4 h5 h6 span sup sub strong em div table tr td th tbody dl dt dd br hr ul ol li pre u[class](*); img[*](*); a[*](*); iframe[*](*)"
+	config.allowedContent = "small h5 h6 sup sub strong em table tr td th tbody dl dt dd br hr ul ol li pre u[class](*); img[*](*){*}; a[*](*); iframe[*](*); span[*](*); div[*](*); h1[*](*); h2[*](*){*}; h3[*](*){*}; h4[*](*); p{*}[*](*); section[*](*); picture[*](*){*}; figure[*](*){*}; figcaption[*](*){*}"
 	config.disallowedContent = 'img{width, height}[width, height]'
 
-	config.extraPlugins = (config.extraPlugins ? config.extraPlugins + ',' : '') + 'sourcedialog'
+	config.extraPlugins = (config.extraPlugins ? config.extraPlugins + ',' : '') + 'sourcedialog,flex-picture'
+
+	config.sourceAreaTabSize = 4;
 };
+
+CKEDITOR.on( 'instanceReady', function( ev ) {
+	function makeBlockStyleFormat(tag) {
+		ev.editor.dataProcessor.writer.setRules( tag, {
+			indent: true,
+			breakBeforeOpen: true,
+			breakAfterOpen: true,
+			breakBeforeClose: true,
+			breakAfterClose: true
+		})
+	}
+    ev.editor.dataProcessor.writer.selfClosingEnd = '/>';
+    ev.editor.dataProcessor.writer.indentationChars = '\t';
+	for(let tag of ['div', 'section', 'p', 'h1', 'h2', 'h3', 'h4', 'h5']) {
+		makeBlockStyleFormat(tag)
+	}
+});
