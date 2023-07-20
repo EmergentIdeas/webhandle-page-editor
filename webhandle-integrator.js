@@ -16,6 +16,7 @@ const createUploadFileServer = require('./lib/create-upload-file-server')
 const createPageInfoServer = require('./lib/create-page-info-server')
 const PageEditorService = require('./lib/page-editor-service')
 
+const pageDirectoriesPrerun = require('./lib/properties-prerun-page-directories')
 
 
 const formInjector = require('form-value-injector')
@@ -39,6 +40,9 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		, defaultPropertyTemplate: 'webhandle-page-editor/page-properties-editor/basic-properties'
 		, operationPrefix: '/webhandle-page-editor/admin/page-editor/v1/page-operation/'
 		, actionPrefix: '/webhandle-page-editor/admin/page-editor/v1/page-properties/'
+		, pagePropertiesPrerun: [
+			pageDirectoriesPrerun
+		]
 	}, options)
 	
 	
@@ -46,7 +50,15 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	
 	if(!webhandle.services.pageEditor) {
 		webhandle.services.pageEditor = pageEditorService = new PageEditorService({pagesDirectory, pagesSource, editorGroups: options.editorGroups})
+		webhandle.services.pageEditor.pagePropertiesPrerun = options.pagePropertiesPrerun || []
 	}
+	else {
+		if(!webhandle.services.pageEditor.pagePropertiesPrerun) {
+			webhandle.services.pageEditor.pagePropertiesPrerun = []
+		}
+		webhandle.services.pageEditor.pagePropertiesPrerun.push(...(options.pagePropertiesPrerun || []))
+	}
+	
 
 	let pageInfoServer = createPageInfoServer(pageEditorService.getPageInfo)
 	// router.use(pageInfoServer)
@@ -192,7 +204,9 @@ let integrate = function(webhandle, pagesSource, router, options) {
 				if(pageInfo.editor && pageInfo.editor.propertiesTemplate) {
 					propertiesTemplate = pageInfo.editor.propertiesTemplate
 				}
-				res.locals.pageDirectories = await pageEditorService.getPageDirectories()
+				for(let prerun of webhandle.services.pageEditor.pagePropertiesPrerun) {
+					await prerun(req, res)
+				}
 				addFormInjector(req, res, pageInfo)
 				res.render(propertiesTemplate)
 			})

@@ -41,7 +41,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.filebrowserBrowseUrl = '/webhandle-page-editor/files/browse/type/all'
 	config.filebrowserImageBrowseUrl = '/webhandle-page-editor/files/browse/type/image'
 	config.filebrowserUploadUrl = '/webhandle-page-editor/files/upload-file?action=upload'
-	config.allowedContent = "small h5 h6 sup sub strong em table tr td th tbody dl dt dd br hr ul ol li pre u[class](*); img[*](*){*}; a[*](*); iframe[*](*); span[*](*); div[*](*); h1[*](*); h2[*](*){*}; h3[*](*){*}; h4[*](*); p{*}[*](*); section[*](*); picture[*](*){*}; figure[*](*){*}; figcaption[*](*){*}"
+	config.allowedContent = "small h5 h6 sup sub strong em table tr td th tbody dl dt dd br hr ul ol li pre u[class](*); img[*](*){*}; a[*](*); iframe[*](*); span[*](*); div[*](*); h1[*](*); h2[*](*){*}; h3[*](*){*}; h4[*](*); p{*}[*](*); section[*](*); picture[*](*){*}; figure[*](*){*}; figcaption[*](*){*}; script[*](*){*}"
 	config.disallowedContent = 'img{width, height}[width, height]'
 
 	config.extraPlugins = (config.extraPlugins ? config.extraPlugins + ',' : '') + 'sourcedialog,flex-picture'

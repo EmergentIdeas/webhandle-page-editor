@@ -63,6 +63,21 @@ It's possible to change where the "P" icon directs to by adding something like t
 </script>
 ```
 
+## Custom page properties
+Sometimes the properties page will need data setup. This can be done by adding to the array:
+
+```
+webhandle.services.pageEditor.pagePropertiesPrerun
+```
+
+Functions added should be of the form:
+
+```
+async (req, res) => {
+	res.locals.someVariable = await [some long running process]
+}
+
+```
 
 
 
