@@ -10,6 +10,7 @@ const express = require('express')
 
 let log = filog('webhandle-page-editor')
 const setupFlexPicture = require('@dankolz/picture-ckeditor-plugin/server-js/integrate')
+const setupTemplateReplacement = require('@dankolz/template-ckeditor-plugin/server-js/integrate')
 
 const createPageSaveServer = require('./lib/create-page-save-server')
 const createUploadFileServer = require('./lib/create-upload-file-server')
@@ -17,6 +18,8 @@ const createPageInfoServer = require('./lib/create-page-info-server')
 const PageEditorService = require('./lib/page-editor-service')
 
 const pageDirectoriesPrerun = require('./lib/properties-prerun-page-directories')
+const replaceDoubleUnderscores = require('./lib/replace-double-underscores')
+const replaceTemplateContent = require('./lib/replace-template-content')
 
 
 const formInjector = require('form-value-injector')
@@ -43,6 +46,10 @@ let integrate = function(webhandle, pagesSource, router, options) {
 		, pagePropertiesPrerun: [
 			pageDirectoriesPrerun
 		]
+		, editableContentPostProcessors: [
+			replaceDoubleUnderscores
+			, replaceTemplateContent
+		]
 	}, options)
 	
 	
@@ -51,12 +58,17 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	if(!webhandle.services.pageEditor) {
 		webhandle.services.pageEditor = pageEditorService = new PageEditorService({pagesDirectory, pagesSource, editorGroups: options.editorGroups})
 		webhandle.services.pageEditor.pagePropertiesPrerun = options.pagePropertiesPrerun || []
+		webhandle.services.pageEditor.editableContentPostProcessors = options.editableContentPostProcessors || []
 	}
 	else {
 		if(!webhandle.services.pageEditor.pagePropertiesPrerun) {
 			webhandle.services.pageEditor.pagePropertiesPrerun = []
 		}
+		if(!webhandle.services.pageEditor.editableContentPostProcessors) {
+			webhandle.services.pageEditor.editableContentPostProcessors = []
+		}
 		webhandle.services.pageEditor.pagePropertiesPrerun.push(...(options.pagePropertiesPrerun || []))
+		webhandle.services.pageEditor.editableContentPostProcessors.push(...(options.editableContentPostProcessors || []))
 	}
 	
 
@@ -77,6 +89,7 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	
 	
 	setupFlexPicture()
+	setupTemplateReplacement()
 
 	fullSink = new FileSink(webhandle.staticPaths[0])
 	pageSink = new FileSink(pagesDirectory)

@@ -1,6 +1,6 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "description": "Edit web pages",
   "main": "webhandle-integrator.js",
   "browser": "client-integrator.js",
@@ -33,8 +33,9 @@
   },
   "dependencies": {
     "@dankolz/picture-ckeditor-plugin": "^1.0.0",
+    "@dankolz/template-ckeditor-plugin": "^1.0.0",
     "@dankolz/webhandle-admin-icons": "^1.0.0",
-    "cheerio": "^1.0.0-rc.2",
+    "cheerio": "^1.0.0-rc.12",
     "ckeditor4": "^4.21.0",
     "composite-file-list": "^1.0.2",
     "ei-dialog": "^1.0.3",

@@ -44,7 +44,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.allowedContent = "small h5 h6 sup sub strong em table tr td th tbody dl dt dd br hr ul ol li pre u[class](*); img[*](*){*}; a[*](*); iframe[*](*); span[*](*); div[*](*); h1[*](*); h2[*](*){*}; h3[*](*){*}; h4[*](*); p{*}[*](*); section[*](*); picture[*](*){*}; figure[*](*){*}; figcaption[*](*){*}; script[*](*){*}"
 	config.disallowedContent = 'img{width, height}[width, height]'
 
-	config.extraPlugins = (config.extraPlugins ? config.extraPlugins + ',' : '') + 'sourcedialog,flex-picture'
+	config.extraPlugins = (config.extraPlugins ? config.extraPlugins + ',' : '') + 'sourcedialog,flex-picture,template-replacement'
 
 	config.sourceAreaTabSize = 4;
 };
