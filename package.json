@@ -1,13 +1,13 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.36",
+  "version": "1.0.37",
   "description": "Edit web pages",
   "main": "webhandle-integrator.js",
   "browser": "client-integrator.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "less-build": "lessc less/page-editor.less > public/webhandle-page-editor/css/page-editor.css",
-    "postinstall": "mkdir -p public/webhandle-page-editor/js; npm run kalpa-build",
+    "postinstall": "npm run kalpa-build",
     "kalpa-build": "npx webpack --config kalpa.webpack.js"
   },
   "repository": {
