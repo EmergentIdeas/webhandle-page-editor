@@ -65,13 +65,14 @@ if(fileBrowserPage) {
 }
 
 
-var treeMaker = require('./tree-maker')
 
 
 
-var menuMaker = function(options) {
+var menuMaker = async function(options) {
 	var $wrapper = $(options.wrapper)
 	$wrapper.append(menuFrame())
+	let treeMaker = (await require('./tree-maker')())
+
 	
 	
 	var makePageActive = function() {

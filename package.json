@@ -1,12 +1,14 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "description": "Edit web pages",
   "main": "webhandle-integrator.js",
   "browser": "client-integrator.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "less-build": "lessc less/page-editor.less > public/webhandle-page-editor/css/page-editor.css"
+    "less-build": "lessc less/page-editor.less > public/webhandle-page-editor/css/page-editor.css",
+    "postinstall": "mkdir -p public/webhandle-page-editor/js; npm run kalpa-build",
+    "kalpa-build": "npx webpack --config kalpa.webpack.js"
   },
   "repository": {
     "type": "git",
@@ -29,14 +31,15 @@
     "less": "^2.7.2",
     "onchange": "^3.2.1",
     "parallelshell": "^3.0.1",
-    "uglify-js": "^3.4.2"
+    "uglify-js": "^3.4.2",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "@dankolz/picture-ckeditor-plugin": "^1.0.0",
     "@dankolz/template-ckeditor-plugin": "^1.0.0",
     "@dankolz/webhandle-admin-icons": "^1.0.0",
     "cheerio": "^1.0.0-rc.12",
-    "ckeditor4": "^4.21.0",
+    "ckeditor4": "4.22",
     "composite-file-list": "^1.0.2",
     "ei-dialog": "^1.0.3",
     "ei-pic-browser": "^1.0.9",
@@ -49,14 +52,30 @@
     "kalpa-tree": "^4.1.1",
     "tripartite": "^1.0.15",
     "underscore": "^1.9.1",
+    "webhandle-page-editor": "file:../../../../home/kolz/data/node-repo/webhandle-page-editor/webhandle-page-editor-1.0.34.tgz",
     "webhandle-page-server": "^1.0.11"
   },
   "peerDependencies": {
-    "webhandle": ">=1.0.27"
+    "webhandle": ">=1.0.30"
   },
   "browserify": {
     "transform": [
       "tripartite/browserify-transform"
     ]
-  }
+  },
+  "files": [
+    "client-lib",
+    "less",
+    "lib",
+    "public/webhandle-page-editor/img",
+    "public/webhandle-page-editor/css",
+    "public/webhandle-page-editor/js/.gitkeep",
+    "public/webhandle-page-editor/std-config.js",
+    "views",
+    "app-client.js",
+    "webhandle-integrator.js",
+    "kalpa.webpack.js",
+    "client-integrator.js",
+    "./*.tri"
+  ]
 }

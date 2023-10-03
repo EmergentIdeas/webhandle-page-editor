@@ -7,9 +7,12 @@ var serialize = function(tree, rootId, result) {
 	})
 }
 
+let kalpaTreePath = '/webhandle-page-editor/js/kalpa-tree.js'
+
 var treeMaker = function(treeData) {
-	var Tree = require('kalpa-tree').default
-	  , JSONStream = require('JSONStream')
+	let Tree = window.KalpaTree.default
+	
+	let JSONStream = require('JSONStream')
 	  , tree
 	  , Readable = require('stream').Readable
 	  , i = 0
@@ -50,4 +53,23 @@ var treeMaker = function(treeData) {
 	return tree
 }
 
-module.exports = treeMaker
+async function createTreeMaker() {
+	return new Promise((resolve, reject) => {
+		if(window.KalpaTree) {
+			resolve(treeMaker)
+		}
+		else {
+			let ckscript = document.createElement('script');
+			ckscript.setAttribute('src', kalpaTreePath);
+			ckscript.onload = async function() {
+				resolve(treeMaker)
+			}
+			document.head.appendChild(ckscript)
+		}
+	})
+}
+
+
+
+
+module.exports = createTreeMaker
