@@ -1,6 +1,6 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.38",
+  "version": "1.0.39",
   "description": "Edit web pages",
   "main": "webhandle-integrator.js",
   "browser": "client-integrator.js",
@@ -49,6 +49,7 @@
     "find": "^0.3.0",
     "form-value-injector": "^1.0.6",
     "kalpa-tree": "^4.1.1",
+    "node-polyfill-webpack-plugin": "^2.0.1",
     "tripartite": "^1.0.15",
     "underscore": "^1.9.1",
     "webhandle-page-server": "^1.0.11",

@@ -1,8 +1,9 @@
 const path = require('path');
+const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
 
 /* need to install:
 
-npm i --save-dev webpack-cli 
+npm i --save-dev webpack-cli node-polyfill-webpack-plugin
 
 */
 
@@ -19,4 +20,7 @@ module.exports = {
 			umdNamedDefine: true
 		}
 	}
+	, plugins: [
+        new NodePolyfillPlugin()
+    ]
 };
