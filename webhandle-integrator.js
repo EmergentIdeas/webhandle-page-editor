@@ -36,6 +36,7 @@ let pagesDirectory;
 let fullSink
 let pageSink
 
+const kalpaTreeOnPage = require('kalpa-tree-on-page')
 
 let integrate = function(webhandle, pagesSource, router, options) {
 	options = _.extend({
@@ -88,6 +89,7 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	webhandle.addTemplateDir(path.join(webhandle.projectRoot, 'node_modules/webhandle-page-editor/views'))
 	
 	
+	kalpaTreeOnPage(webhandle)
 	setupFlexPicture()
 	setupTemplateReplacement()
 

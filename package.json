@@ -1,13 +1,12 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.40",
+  "version": "1.0.41",
   "description": "Edit web pages",
   "main": "webhandle-integrator.js",
   "browser": "client-integrator.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "less-build": "lessc less/page-editor.less > public/webhandle-page-editor/css/page-editor.css",
-    "postinstall": "npm run kalpa-build",
     "kalpa-build": "npx webpack --config kalpa.webpack.js"
   },
   "repository": {
@@ -31,7 +30,9 @@
     "less": "^2.7.2",
     "onchange": "^3.2.1",
     "parallelshell": "^3.0.1",
-    "uglify-js": "^3.4.2"
+    "uglify-js": "^3.4.2",
+    "node-polyfill-webpack-plugin": "^2.0.1",
+    "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "@dankolz/picture-ckeditor-plugin": "^1.0.0",
@@ -48,12 +49,10 @@
     "filter-log": "0.0.5",
     "find": "^0.3.0",
     "form-value-injector": "^1.0.6",
-    "kalpa-tree": "^4.1.1",
-    "node-polyfill-webpack-plugin": "^2.0.1",
+    "kalpa-tree-on-page": "^1.0.2",
     "tripartite": "^1.0.15",
     "underscore": "^1.9.1",
-    "webhandle-page-server": "^1.0.11",
-    "webpack-cli": "^5.1.4"
+    "webhandle-page-server": "^1.0.11"
   },
   "peerDependencies": {
     "webhandle": ">=1.0.30"
