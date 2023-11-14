@@ -1,12 +1,12 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.41",
+  "version": "1.0.42",
   "description": "Edit web pages",
   "main": "webhandle-integrator.js",
   "browser": "client-integrator.js",
   "scripts": {
     "test": "npx mocha",
-    "less-build": "lessc less/page-editor.less > public/webhandle-page-editor/css/page-editor.css",
+    "less-build": "lessc less/page-editor.less > public/webhandle-page-editor/css/page-editor.css"
   },
   "repository": {
     "type": "git",
