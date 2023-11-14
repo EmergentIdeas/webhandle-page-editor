@@ -38,7 +38,7 @@ let pageSink
 
 const kalpaTreeOnPage = require('kalpa-tree-on-page')
 
-let integrate = function(webhandle, pagesSource, router, options) {
+let integrate = async function(webhandle, pagesSource, router, options) {
 	options = _.extend({
 		editorGroups: ['administrators', 'page-editors']
 		, defaultPropertyTemplate: 'webhandle-page-editor/page-properties-editor/basic-properties'
@@ -58,6 +58,7 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	
 	if(!webhandle.services.pageEditor) {
 		webhandle.services.pageEditor = pageEditorService = new PageEditorService({pagesDirectory, pagesSource, editorGroups: options.editorGroups})
+		await pageEditorService.init()
 		webhandle.services.pageEditor.pagePropertiesPrerun = options.pagePropertiesPrerun || []
 		webhandle.services.pageEditor.editableContentPostProcessors = options.editableContentPostProcessors || []
 	}
@@ -73,9 +74,9 @@ let integrate = function(webhandle, pagesSource, router, options) {
 	}
 	
 
-	let pageInfoServer = createPageInfoServer(pageEditorService.getPageInfo)
+	let pageInfoServer = await createPageInfoServer(pageEditorService.getPageInfo)
 	// router.use(pageInfoServer)
-	let pageSaveServer = createPageSaveServer(pagesSource)
+	let pageSaveServer = await createPageSaveServer(pagesSource)
 	router.use(pageSaveServer)
 	
 	// set a flag so that the pages can see if the editor is a page editor

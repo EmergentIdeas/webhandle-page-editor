@@ -1,6 +1,6 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.42",
+  "version": "1.0.43",
   "description": "Edit web pages",
   "main": "webhandle-integrator.js",
   "browser": "client-integrator.js",
@@ -26,20 +26,20 @@
   "homepage": "https://github.com/EmergentIdeas/webhandle-page-editor#readme",
   "devDependencies": {
     "browserify": "^16.2.2",
+    "chai": "^4.3.10",
     "less": "^2.7.2",
+    "mocha": "^10.2.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "onchange": "^3.2.1",
     "parallelshell": "^3.0.1",
     "uglify-js": "^3.4.2",
-    "mocha": "^10.2.0",
-    "chai": "^4.3.10",
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
     "@dankolz/picture-ckeditor-plugin": "^1.0.0",
     "@dankolz/template-ckeditor-plugin": "^1.0.0",
     "@dankolz/webhandle-admin-icons": "^1.0.0",
-    "@webhandle/page-locator": "^1.0.0",
+    "@webhandle/page-locator": "^1.0.1",
     "cheerio": "^1.0.0-rc.12",
     "ckeditor4": "4.22",
     "composite-file-list": "^1.0.2",
