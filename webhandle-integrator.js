@@ -356,6 +356,9 @@ let integrate = async function(webhandle, pagesSource, router, options) {
 	})
 	
 
+	router.get('/manage-files', (req, res) => {
+		res.render('webhandle-page-editor/tools/manage-files')
+	})
 	
 	router.get(/\/upload-file\/?.*/, (req, res) => {
 		let parts = req.originalUrl.split('/')

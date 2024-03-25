@@ -1,0 +1,13 @@
+__::app_pre__
+<div class="webhandle-page-editor-file-browser">
+	<h1>Manage Files</h1>
+	
+	
+		<div class="manage-files webhandle-file-tree-image-browser">
+
+		</div>
+
+
+</div>
+
+__::app_post__
