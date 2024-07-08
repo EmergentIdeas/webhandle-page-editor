@@ -6,6 +6,7 @@ var Dialog = require('ei-dialog')
 var inputTemplate = require('./input-template.tri')
 var textareaTemplate = require('./textarea-template.tri')
 
+const { ImageBrowserView, FileSelectDialog, loadStyles  } = require('@webhandle/tree-file-browser/client-lib/dynamic-load.mjs')
 const webhandleEnvSetup = require('./client-lib/webhandle-env-setup')
 
 var propertiesDialog

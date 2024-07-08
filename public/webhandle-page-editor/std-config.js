@@ -47,6 +47,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.extraPlugins = (config.extraPlugins ? config.extraPlugins + ',' : '') + 'sourcedialog,flex-picture,template-replacement'
 
 	config.sourceAreaTabSize = 4;
+	config.versionCheck = false
 };
 
 CKEDITOR.on( 'instanceReady', function( ev ) {
