@@ -144,8 +144,8 @@ let integrate = async function(webhandle, pagesSource, router, options) {
 	router.get('/admin/files/api/all-pages/:menuName', async (req, res, next) => {
 		if(pageEditorService.isUserPageEditor(req)) {
 			let content = await menuSink.read(req.params.menuName + '.json')
+			res.set('Content-Type', "text/json")
 			res.end(content)
-
 		}
 		else {
 			res.redirect('/login')
