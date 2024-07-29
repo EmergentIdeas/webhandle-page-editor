@@ -120,6 +120,13 @@ let integrate = async function(webhandle, pagesSource, router, options) {
 	})
 	
 	
+	router.post('/admin/update-resource-version', (req, res, next) => {
+		webhandle.resourceVersion = ('' + new Date().getTime())
+		res.addFlashMessage(`Resource version updated: ${webhandle.resourceVersion}.`, () => {
+			res.redirect('/menu')
+		})
+
+	})
 	
 	router.get('/admin/files/api/all-pages', (req, res, next) => {
 		if(pageEditorService.isUserPageEditor(req)) {
