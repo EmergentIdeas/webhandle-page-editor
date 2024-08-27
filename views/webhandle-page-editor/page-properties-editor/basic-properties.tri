@@ -14,12 +14,15 @@ __::app_pre__
 				<textarea name="description"></textarea>
 			</label>
 			<label>
-				Public / Private page
+				Page Visibility
 				<select name="pageVisibility">
 					<option value="public">public</option>
+					<option value="hidden">hidden</option>
 					<option value="private">private</option>
 				</select>
-				<div class="instructions">Private pages will not be shown in site index or search results.</div>
+				<div class="instructions">Hidden pages will not be shown in site index or search results. Private pages, in addition to being hidden,
+					will not be accessible to users who are not signed in (the public).
+				</div>
 			</label>
 		</div>
 		<label class="xs12 t6">

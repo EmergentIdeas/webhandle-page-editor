@@ -21,6 +21,8 @@ const pageDirectoriesPrerun = require('./lib/properties-prerun-page-directories'
 const replaceDoubleUnderscores = require('./lib/replace-double-underscores')
 const replaceTemplateContent = require('./lib/replace-template-content')
 
+const pageListCreator = require('./lib/page-list')
+
 
 const formInjector = require('form-value-injector')
 function addFormInjector(req, res, focus) {
@@ -322,6 +324,10 @@ let integrate = async function(webhandle, pagesSource, router, options) {
 			})
 		}
 	})
+	
+	let allPagesRouter = pageListCreator()
+	router.get('/admin/page-editor/page-list', allPagesRouter)
+
 	router.get('/admin/page-editor/menu-editor', (req, res, next) => {
 		webhandle.pageServer.prerenderSetup(req, res, {}, () => {
 			res.render('webhandle-page-editor/tools/menu-editor')

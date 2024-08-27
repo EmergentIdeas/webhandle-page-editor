@@ -1,0 +1,15 @@
+__::app_pre__
+__flashMessages::flash-message__
+	<section class="page-main-menu">
+		<h1>All Pages</h1>
+		<p>
+			<a class="btn" href="/webhandle-page-editor/admin/page-editor/create-page">Create Page</a>
+		</p>
+		<ul class="all-pages-list">
+		__pageUrls::webhandle-page-editor/tools/page-link-item__
+		</ul>
+		<p>
+			<a class="btn" href="/webhandle-page-editor/admin/page-editor/create-page">Create Page</a>
+		</p>
+	</section>
+__::app_post__
