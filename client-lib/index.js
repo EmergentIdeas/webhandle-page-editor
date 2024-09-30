@@ -71,6 +71,7 @@ if (fileBrowserPage) {
 let menuMaker = async function (options) {
 	let $wrapper = $(options.wrapper)
 	$wrapper.append(menuFrame())
+	let pageDiv = $wrapper.get(0)
 
 	const makeTree = require('kalpa-tree-on-page')
 
@@ -118,6 +119,24 @@ let menuMaker = async function (options) {
 			}
 			$wrapper.find('input[name=customClasses]').val(node.customClasses)
 			$wrapper.find('input[name=image]').val(node.image)
+			
+			if(node.elementAttributes) {
+				let keys = [...Object.keys(node.elementAttributes)]
+				let vals = [...Object.values(node.elementAttributes)]
+				let comb = []
+				while(keys.length > 0 && vals.length > 0) {
+					comb.push(keys.shift())
+					comb.push(vals.shift())
+				}
+				let inputs = [...pageDiv.querySelectorAll('.element-attributes input')]
+				while(inputs.length > 0 && comb.length > 0) {
+					let inp = inputs.shift()
+					let val = comb.shift()
+					inp.value = val
+				}
+			}
+			
+			
 
 			$wrapper.find('input[name=linkBy]').click(function (evt) {
 				if ($(this).val() == 'page') {
@@ -163,6 +182,20 @@ let menuMaker = async function (options) {
 						node.image = $wrapper.find('input[name=image]').val()
 						tree.edit(node)
 					})
+				})
+			})
+			
+			$wrapper.find('.element-attributes input').on('keydown', function(evt) {
+				setTimeout(function() {
+					node.elementAttributes = {}
+					let inputs = [...pageDiv.querySelectorAll('.element-attributes input')]
+					while(inputs.length > 0) {
+						node.elementAttributes[inputs[0].value] = inputs[1].value
+						inputs.shift()
+						inputs.shift()
+					}
+					
+					tree.edit(node)
 				})
 			})
 

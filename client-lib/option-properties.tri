@@ -1,6 +1,6 @@
 <div class="option-properties">
 	<label>Label:
-		<input class="control" name="label" type="text"/>
+		<input class="control" name="label" type="text" />
 	</label>
 	<label>Link by:
 	</label>
@@ -13,17 +13,73 @@
 	<label class="page-label">Page:
 		<select name="page">
 			<option value="">-- choose a page --</option>
-			
+
 		</select>
 	</label>
 	<label class="url-label">URL:
 		<input class="control" name="url" type="text" />
 	</label>
 	<label>Custom classes:
-		<input class="control" name="customClasses" type="text"/>
+		<input class="control" name="customClasses" type="text" />
 	</label>
 	<label>Image:
-		<input class="form-control" type="text" placeholder="" name="image" data-image-dir="/img"/>
+		<input class="form-control" type="text" placeholder="" name="image" data-image-dir="/img" />
 	</label>
-
+	<details class="element-attributes">
+		<summary>
+			Attributes
+		</summary>
+		<p>
+			<table border="1" >
+				<tbody>
+					<tr>
+						<th>Attribute name</th>
+						<th>Value</th>
+					</tr>
+					<tr>
+						<td>
+							<input name="attrName" type="text" />	
+						</td>
+						<td>
+							<input name="attrValue" type="text" />	
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input name="attrName" type="text" />	
+						</td>
+						<td>
+							<input name="attrValue" type="text" />	
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input name="attrName" type="text" />	
+						</td>
+						<td>
+							<input name="attrValue" type="text" />	
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input name="attrName" type="text" />	
+						</td>
+						<td>
+							<input name="attrValue" type="text" />	
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<input name="attrName" type="text" />	
+						</td>
+						<td>
+							<input name="attrValue" type="text" />	
+						</td>
+					</tr>
+					
+				</tbody>
+				
+			</table>
+		</p>
+	</details>
 </div>
