@@ -2,32 +2,74 @@ __::app_pre__
 <h1>Edit Page Properties</h1>
 
 <h2><a href="/__pagePath__">__true??pagePath || '/'__</a></h2>
-<form class="ei-form" method="POST" action="__actionPrefix____pagePath__">
-	<label>
+<form class="ei-form page-properties-form" method="POST" action="__actionPrefix____pagePath__">
+	<div class="grid folder-and-name">
+		<div class="xs12 t6">
+			<label class="page-folder">
+				Folder
+				<select name="folder">
+					__pageDirectories::./option__
+
+				</select>
+				<div class="instructions">
+					This forms part of the page's url
+				</div>
+			</label>
+		</div>
+		<div class="xs12 t6">
+			<label class="page-name">
+				Page name
+				<input name="pageName" type="text" />
+				<div class="instructions">
+					This shows as the page url - should be just lower case letters, numbers, and dashes without spaces
+				</div>
+			</label>
+		</div>
+	</div>
+	<label class="page-title">
 		Title
 		<input name="title" type="text" />
+		<div class="instructions">
+			This shows in the user's browser bar
+		</div>
 	</label>
 	<div class="grid">
 		<div class="xs12 t6">
-			<label>
+			<label class="page-description">
 				Description
 				<textarea name="description"></textarea>
+				<div class="instructions">
+					This describes the page in search results
+				</div>
 			</label>
-			<label>
+			<label class="page-visbility">
 				Page Visibility
 				<select name="pageVisibility">
 					<option value="public">public</option>
 					<option value="hidden">hidden</option>
 					<option value="private">private</option>
 				</select>
-				<div class="instructions">Hidden pages will not be shown in site index or search results. Private pages, in addition to being hidden,
+				<div class="instructions">Hidden pages will not be shown in site index or search results. Private pages,
+					in addition to being hidden,
 					will not be accessible to users who are not signed in (the public).
 				</div>
 			</label>
 		</div>
-		<label class="xs12 t6">
-			Page Image (Used for social media)
+		<label class="xs12 t6 page-image">
+			Page Image 
 			<input name="image" type="text" class="picture-input-field" data-image-dir="/img" />
+			<div class="instructions">
+				<p>
+				This is used by social media sites to show a page preview.
+				It should be about 1,200 x 630 pixels to 1,200 x 1100 pixels in size. So, longer than it is tall by a decent amount.
+				</p>
+				<p>
+					However, even more important than the size is to use an image which can be automatically cropped without suffering too much. So, nothing near the edges of the image and the subject of the picture more or less in the center.
+
+					This creates flexibility so that if a platform decides square images are best, yours will still look okay. If it decides long images work for its layout, perfect! If it wants super tall for mobile, then your subject is still in frame.
+				</p>
+				
+			</div>
 		</label>
 	</div>
 

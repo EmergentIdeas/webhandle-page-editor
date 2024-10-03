@@ -23,6 +23,9 @@ const replaceTemplateContent = require('./lib/replace-template-content')
 
 const pageListCreator = require('./lib/page-list')
 
+const folderAndFile = require('./lib/folder-and-file-from-path')
+const trimSlashes = require('./lib/trim-slashes')
+
 
 const formInjector = require('form-value-injector')
 function addFormInjector(req, res, focus) {
@@ -232,6 +235,10 @@ let integrate = async function(webhandle, pagesSource, router, options) {
 				for(let prerun of webhandle.services.pageEditor.pagePropertiesPrerun) {
 					await prerun(req, res)
 				}
+				let [folder, file] = folderAndFile(pagePath)
+				pageInfo.folder = folder
+				pageInfo.pageName = file
+				
 				addFormInjector(req, res, pageInfo)
 				res.render(propertiesTemplate)
 			})
@@ -253,21 +260,29 @@ let integrate = async function(webhandle, pagesSource, router, options) {
 			if(!pageInfo) {
 				pageInfo = {}
 			}
+			let pageDestination
+			let {folder, pageName} = req.body
+			if(pageName == '' || !pageName || pageName == '/') {
+				pageName = 'index'
+			}
+			if(folder && pageName) {
+				pageDestination = trimSlashes(folder + '/' + pageName)
+			}
+			delete req.body.folder
+			delete req.body.pageName
+
 			pageInfo = Object.assign(pageInfo, req.body)
 			pageInfo = await pageEditorService.savePageInfo(pagePath, pageInfo)
-
-			webhandle.pageServer.prerenderSetup(req, res, {}, () => {
-				res.addFlashMessage("Page properties updated", (err) => {
-					res.locals.pagePath = pagePath
-					res.locals.actionPrefix = options.actionPrefix
-					res.locals.operationPrefix = options.operationPrefix
-					let propertiesTemplate = options.defaultPropertyTemplate
-					if(pageInfo.editor && pageInfo.editor.propertiesTemplate) {
-						propertiesTemplate = pageInfo.editor.propertiesTemplate
-					}
-					addFormInjector(req, res, pageInfo)
-					res.redirect(req.originalUrl)
-				})
+			
+			let redirectUrl = decodeURIComponent(req.originalUrl)
+			
+			if(pagePath != pageDestination) {
+				await pageEditorService.movePage(pagePath, pageDestination)
+				redirectUrl = redirectUrl.substring(0, redirectUrl.length - pagePath.length) + pageDestination
+			}
+			
+			res.addFlashMessage("Page properties updated", (err) => {
+				res.redirect(redirectUrl)
 			})
 		}
 		catch(e) {
@@ -280,16 +295,6 @@ let integrate = async function(webhandle, pagesSource, router, options) {
 	})
 
 	router.post('/admin/page-editor/v1/page-operation/move:pagePath(\\S{0,})', async (req, res, next) => {
-		function trimSlashes(path) {
-			while(path.startsWith('/')) {
-				path = path.substring(1)
-			}
-			while(path.endsWith('/')) {
-				path = path.substring(0, path.length - 1)
-			}
-			
-			return path
-		}
 		let pagePath = req.params.pagePath
 		if(pagePath == '' || !pagePath || pagePath == '/') {
 			pagePath = 'index'

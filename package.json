@@ -1,6 +1,6 @@
 {
   "name": "webhandle-page-editor",
-  "version": "1.0.49",
+  "version": "1.0.50",
   "description": "Edit web pages",
   "main": "webhandle-integrator.js",
   "browser": "client-integrator.js",
