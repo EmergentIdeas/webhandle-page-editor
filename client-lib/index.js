@@ -146,27 +146,34 @@ let menuMaker = async function (options) {
 					makeUrlActive()
 				}
 			})
-
-			$wrapper.find('input[name=label]').keydown(function (evt) {
+			
+			function labelChange(evt) {
 				setTimeout(function () {
 					node.label = $wrapper.find('input[name=label]').val()
 					tree.edit(node)
 				})
-			})
+			}
 
-			$wrapper.find('input[name=url]').keydown(function (evt) {
+			$wrapper.find('input[name=label]').on('keydown', labelChange)
+			$wrapper.find('input[name=label]').on('input', labelChange)
+
+			function urlChange(evt) {
 				setTimeout(function () {
 					node.url = $wrapper.find('input[name=url]').val()
 					tree.edit(node)
 				})
-			})
+			}
+			$wrapper.find('input[name=url]').on('keydown', urlChange)
+			$wrapper.find('input[name=url]').on('input', urlChange)
 
-			$wrapper.find('input[name=customClasses]').keydown(function (evt) {
+			function customClassChange(evt) {
 				setTimeout(function () {
 					node.customClasses = $wrapper.find('input[name=customClasses]').val()
 					tree.edit(node)
 				})
-			})
+			}
+			$wrapper.find('input[name=customClasses]').on('keydown', customClassChange)
+			$wrapper.find('input[name=customClasses]').on('input', customClassChange)
 
 
 			$wrapper.find('select[name=page]').change(function (evt) {
@@ -185,7 +192,7 @@ let menuMaker = async function (options) {
 				})
 			})
 			
-			$wrapper.find('.element-attributes input').on('keydown', function(evt) {
+			function attributeChange(evt) {
 				setTimeout(function() {
 					node.elementAttributes = {}
 					let inputs = [...pageDiv.querySelectorAll('.element-attributes input')]
@@ -197,7 +204,10 @@ let menuMaker = async function (options) {
 					
 					tree.edit(node)
 				})
-			})
+			}
+
+			$wrapper.find('.element-attributes input').on('keydown', attributeChange)
+			$wrapper.find('.element-attributes input').on('input', attributeChange)
 
 		})
 		tree.editable()
