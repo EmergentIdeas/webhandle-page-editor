@@ -98,6 +98,10 @@ let integrate = async function(webhandle, pagesSource, router, options) {
 	kalpaTreeOnPage(webhandle)
 	setupFlexPicture()
 	setupTemplateReplacement()
+	import('@webhandle/ckeditor-multi-widget-panel/server-lib/integrate.mjs').then(mod => {
+		// integrate the multi-widget-panel
+		mod.default()
+	})
 
 	fullSink = new FileSink(webhandle.staticPaths[0])
 	pageSink = new FileSink(pagesDirectory)
