@@ -36,7 +36,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
-    "@dankolz/picture-ckeditor-plugin": "^1.0.0",
+    "@dankolz/picture-ckeditor-plugin": "^1.0.6",
     "@dankolz/template-ckeditor-plugin": "^1.0.0",
     "@dankolz/webhandle-admin-icons": "^1.0.0",
     "@webhandle/ckeditor-multi-widget-panel": "^1.0.1",
@@ -45,12 +45,12 @@
     "cheerio": "^1.0.0-rc.12",
     "ckeditor4": "4.22",
     "composite-file-list": "^1.0.2",
-    "ei-dialog": "^1.0.3",
+    "ei-dialog": "^1.0.10",
     "ei-pic-browser": "^1.0.9",
     "file-sink": "^1.0.13",
     "file-sink-remote-http": "^1.0.2",
     "file-sink-server": "^1.0.5",
-    "filter-log": "0.0.5",
+    "filter-log": "^1.0.10",
     "find": "^0.3.0",
     "form-value-injector": "^1.0.6",
     "kalpa-tree-on-page": "^1.0.2",
